@@ -3,7 +3,7 @@ package com.volantum.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.volantum.enums.Role;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,13 +33,12 @@ public class User extends AuditableEntity {
 	@Column(nullable = false)
 	private String password;
 	
-	private Role role;
-
 	private float score;
 
 	// RELATIONS
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<Car> cars;
 
 	@OneToMany(mappedBy = "user")
@@ -54,7 +53,6 @@ public class User extends AuditableEntity {
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
-		this.role = Role.USER;
 		this.cars = new ArrayList<Car>();
 		this.drivingSessions = new ArrayList<DrivingSession>();
 	}
@@ -89,14 +87,6 @@ public class User extends AuditableEntity {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
 	}
 
 	public float getScore() {
