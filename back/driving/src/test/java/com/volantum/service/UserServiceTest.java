@@ -8,29 +8,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
-import com.volantum.repository.UserRepository;
 
 @SpringBootTest(classes = VolantumApplication.class)
 public class UserServiceTest {
 
-	private UserService userService;
 	private User testUser;
-
-	@Autowired
-	private UserRepository userRepository;
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private UserService userService;
 
 	@BeforeEach
 	void setUp() {
-		userRepository.deleteAll();
+		userService.deleteAll();
 		testUser = new User("Laura", "Peréz", "laura@volantum.com", "abc123");
-		userService = new UserService(userRepository, passwordEncoder);
 	}
 	
 	@Test

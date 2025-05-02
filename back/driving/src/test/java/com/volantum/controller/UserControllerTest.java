@@ -2,7 +2,6 @@ package com.volantum.controller;
 
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
-import com.volantum.repository.UserRepository;
 import com.volantum.service.UserService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -27,14 +26,11 @@ class UserControllerTest {
 	TestRestTemplate restTemplate;
 
 	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
 	private UserService userService;
 
 	@BeforeEach
 	void setUp() {
-		userRepository.deleteAll();
+		userService.deleteAll();
 		testUser = new User("Laura", "Peréz", "laura@volantum.com", "abc123");
 	}
 

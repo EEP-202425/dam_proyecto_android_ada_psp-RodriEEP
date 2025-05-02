@@ -8,8 +8,6 @@ import com.volantum.domain.Car;
 import com.volantum.domain.DrivingSession;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
-import com.volantum.repository.CarRepository;
-import com.volantum.repository.UserRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,19 +27,19 @@ public class DrivingSessionServiceTest {
     private DrivingSessionService drivingSessionService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    private CarRepository carRepository;
+    private CarService carService;
 
     @BeforeEach
     void setUp() {
-        userTest = userRepository.save(
+        userTest = userService.register(
             new User("Laura", "Perez", "laura@volantum.com", "abc123")
         );
         carTest = new Car("ABC123");
         userTest.addCar(carTest);
-        carTest = carRepository.save(carTest);
+        carTest = carService.save(carTest);
     }
 
     private DrivingSession saveSession(Car car, float distance) {
@@ -55,7 +53,7 @@ public class DrivingSessionServiceTest {
     private Car saveNewCar(String plate) {
         Car newCar = new Car(plate);
         userTest.addCar(newCar);
-        return carRepository.save(newCar);
+        return carService.save(newCar);
     }
 
     @Test
@@ -114,5 +112,7 @@ public class DrivingSessionServiceTest {
         assertThat(updatedSession).isNotNull();
         assertThat(updatedSession.getDistance()).isEqualTo(20.5f);
     }
+
+
 
 }

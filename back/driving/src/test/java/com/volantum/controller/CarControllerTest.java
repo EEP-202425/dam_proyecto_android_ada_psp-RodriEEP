@@ -6,18 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.volantum.domain.Car;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
-import com.volantum.repository.CarRepository;
-import com.volantum.repository.UserRepository;
 import com.volantum.service.CarService;
 import com.volantum.service.UserService;
 
@@ -32,24 +30,13 @@ class CarControllerTest {
 	TestRestTemplate restTemplate;
 
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private CarRepository carRepository;
-
-	@Autowired
 	private CarService carService;
 
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 		
 	@BeforeEach
-	void setUpBeforeEach() {
-		userService = new UserService(userRepository, passwordEncoder);
-		carService = new CarService(carRepository);
+	void setUpBeforeEach() {	
 		carService.deleteAll();
 		userService.deleteAll();
 		testUser = userService.register(new User("Laura", "Peréz", "laura@volantum.com", "abc123"));

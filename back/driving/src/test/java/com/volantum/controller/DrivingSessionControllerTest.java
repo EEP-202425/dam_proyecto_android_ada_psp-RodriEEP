@@ -3,8 +3,6 @@ package com.volantum.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -13,15 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.volantum.domain.Car;
 import com.volantum.domain.DrivingSession;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
-import com.volantum.repository.CarRepository;
-import com.volantum.repository.DrivingSessionRepository;
-import com.volantum.repository.UserRepository;
 import com.volantum.service.CarService;
 import com.volantum.service.DrivingSessionService;
 import com.volantum.service.UserService;
@@ -37,15 +31,6 @@ class DrivingSessionControllerTest {
 	private TestRestTemplate restTemplate;
 
 	@Autowired
-	private DrivingSessionRepository drivingSessionRepository;
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private CarRepository carRepository;
-
-	@Autowired
 	private DrivingSessionService drivingSessionService;
 
 	@Autowired
@@ -54,14 +39,9 @@ class DrivingSessionControllerTest {
 	@Autowired
 	private CarService carService;
 	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 
 	@BeforeEach
 	void setUp() {
-		userService = new UserService(userRepository, passwordEncoder);
-		carService = new CarService(carRepository);
-		drivingSessionService = new DrivingSessionService(drivingSessionRepository);
 		drivingSessionService.deleteAll();
 		carService.deleteAll();
 		userService.deleteAll();

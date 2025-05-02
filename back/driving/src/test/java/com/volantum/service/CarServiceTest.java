@@ -11,37 +11,26 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.volantum.domain.Car;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
-import com.volantum.repository.CarRepository;
-import com.volantum.repository.UserRepository;
 
 @SpringBootTest(classes = VolantumApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CarServiceTest {
-	
-	CarService carService;
 	User testUser;
 	Car testCar;
 	
 	@Autowired
-	CarRepository carRepository;
-	
+	CarService carService;
+
 	@Autowired
-	UserRepository userRepository;
-	
-	@Autowired
-	PasswordEncoder passwordEncoder;
-	
+	UserService userService;
 	
 	@BeforeAll
 	void setUpBeforeAll() {
-		UserService userService = new UserService(userRepository, passwordEncoder);
 		testUser = userService.register(new User("Laura", "Peréz", "laura@volantum.com", "abc123"));
-		carService = new CarService(carRepository);
 	}
 	
 	@BeforeEach

@@ -48,7 +48,6 @@ public class CarController {
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<List<Car>> carsByUser(@PathVariable int userId) {
 		List<Car> cars = carService.carsByUserId(userId);
-		System.out.println("Cars founded" + cars);
 		return ResponseEntity.ok(cars);
 	}
 
