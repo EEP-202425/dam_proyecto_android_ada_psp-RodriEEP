@@ -3,6 +3,8 @@ package com.volantum.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,10 +33,12 @@ public class DrivingSession extends AuditableEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
+	@JsonIgnoreProperties({ "drivingSessions" })
 	private User user;
 
 	@ManyToOne
 	@JoinColumn(name = "car_id")
+	@JsonIgnoreProperties({ "drivingSessions" })
 	private Car car;
 
 	@OneToMany(mappedBy = "drivingSession", cascade = CascadeType.ALL)
@@ -43,8 +47,8 @@ public class DrivingSession extends AuditableEntity {
 	public DrivingSession() {
 	}
 	
-	public DrivingSession(LocalDateTime startTime, User user, Car car) {
-		this.startTime = startTime;
+	public DrivingSession(User user, Car car) {
+		this.startTime = LocalDateTime.now();
 		this.user = user;
 		this.car = car;
 	}

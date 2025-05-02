@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,8 +39,8 @@ public class Car extends AuditableEntity {
 	@JsonBackReference
 	private User user;
 
-	@OneToMany(mappedBy = "car")
-	private List<DrivingSession> drivingSessions = new ArrayList<DrivingSession>();
+	@OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<DrivingSession> drivingSessions = new ArrayList<>();
 
 	@OneToMany(mappedBy = "car")
 	private List<MaintenanceAlert> maintenanceAlerts = new ArrayList<MaintenanceAlert>();

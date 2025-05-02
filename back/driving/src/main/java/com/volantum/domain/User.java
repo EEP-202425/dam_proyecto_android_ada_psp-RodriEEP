@@ -41,7 +41,7 @@ public class User extends AuditableEntity {
 	@JsonManagedReference
 	private List<Car> cars;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<DrivingSession> drivingSessions;
 	
 	public User() {
