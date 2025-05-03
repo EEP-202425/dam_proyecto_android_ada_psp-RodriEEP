@@ -36,6 +36,14 @@ public class Event extends AuditableEntity {
 	public Event() {
 	}
 
+	public Event(EventType type, DrivingSession drivingSession, LocalDateTime timestamp, float latitude, float longitude) {
+		this.type = type;
+		this.drivingSession = drivingSession;
+		this.timestamp = timestamp;
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+
 	public int getId() {
 		return id;
 	}

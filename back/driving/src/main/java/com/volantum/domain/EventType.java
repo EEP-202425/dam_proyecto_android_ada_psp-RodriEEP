@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 public class EventType extends AuditableEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private int id;
 
 	@Column(unique = true, nullable = false)
 	private String name;
@@ -29,7 +29,7 @@ public class EventType extends AuditableEntity {
 		this.severity = severity;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 

@@ -2,6 +2,7 @@ package com.volantum.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -15,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.FetchType;
 
 @Entity
 @Table(name = "driving_sessions")
@@ -41,8 +43,8 @@ public class DrivingSession extends AuditableEntity {
 	@JsonIgnoreProperties({ "drivingSessions" })
 	private Car car;
 
-	@OneToMany(mappedBy = "drivingSession", cascade = CascadeType.ALL)
-	private List<Event> events;
+	@OneToMany(mappedBy = "drivingSession", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Event> events = new ArrayList<>();
 
 	public DrivingSession() {
 	}
@@ -51,6 +53,7 @@ public class DrivingSession extends AuditableEntity {
 		this.startTime = LocalDateTime.now();
 		this.user = user;
 		this.car = car;
+		this.events = new ArrayList<>();
 	}
 
 	public int getId() {
@@ -99,6 +102,11 @@ public class DrivingSession extends AuditableEntity {
 
 	public void setCar(Car car) {
 		this.car = car;
+	}
+
+	public void addEvent(Event event) {
+		events.add(event);
+		event.setDrivingSession(this);
 	}
 
 	public List<Event> getEvents() {

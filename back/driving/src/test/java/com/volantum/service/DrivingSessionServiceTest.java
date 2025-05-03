@@ -2,12 +2,8 @@ package com.volantum.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
-
-import com.volantum.domain.Car;
-import com.volantum.domain.DrivingSession;
-import com.volantum.domain.User;
-import com.volantum.driving.VolantumApplication;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +12,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.volantum.domain.Car;
+import com.volantum.domain.DrivingSession;
+import com.volantum.domain.Event;
+import com.volantum.domain.EventType;
+import com.volantum.domain.User;
+import com.volantum.driving.VolantumApplication;
+import com.volantum.enums.EventSeverity;
+import com.volantum.repository.EventTypeRepository;
+
 @SpringBootTest(classes = VolantumApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
 public class DrivingSessionServiceTest {
     private User userTest;
     private Car carTest;
+    private EventType hardBreakType;
 
     @Autowired
     private DrivingSessionService drivingSessionService;
@@ -32,6 +38,9 @@ public class DrivingSessionServiceTest {
     @Autowired
     private CarService carService;
 
+    @Autowired
+    private EventTypeRepository eventTypeRepository;
+
     @BeforeEach
     void setUp() {
         userTest = userService.register(
@@ -40,6 +49,9 @@ public class DrivingSessionServiceTest {
         carTest = new Car("ABC123");
         userTest.addCar(carTest);
         carTest = carService.save(carTest);
+
+        hardBreakType = new EventType("Hard Brake", EventSeverity.MEDIUM);
+		eventTypeRepository.save(hardBreakType);
     }
 
     private DrivingSession saveSession(Car car, float distance) {
@@ -113,6 +125,34 @@ public class DrivingSessionServiceTest {
         assertThat(updatedSession.getDistance()).isEqualTo(20.5f);
     }
 
-
+    @Test
+    void shouldSetEventsWhenFinishingSession() {
+        // 1. Create a session (when starting the drive)
+        DrivingSession initialSession = saveSession(carTest, 0f);
+        assertThat(initialSession.getEvents()).isEmpty();
+        
+        // 2. Prepare the session update with final data (simulating ending the drive)
+        DrivingSession sessionUpdate = new DrivingSession();
+        sessionUpdate.setDistance(14.3f);
+        
+        // 3. Create events that happened during the drive
+        Event hardBreak1 = new Event(hardBreakType, initialSession, 
+            LocalDateTime.now().minusMinutes(5), 20.5f, 10.0f);
+        Event hardBreak2 = new Event(hardBreakType, initialSession, 
+            LocalDateTime.now().minusMinutes(2), 21.0f, 11.0f);
+        
+        // 4. Add events to the session update
+        sessionUpdate.addEvent(hardBreak1);
+        sessionUpdate.addEvent(hardBreak2);
+        
+        // 5. End session
+        DrivingSession finishedSession = drivingSessionService.update(initialSession.getId(), sessionUpdate);
+        
+        assertThat(finishedSession.getEvents())
+            .hasSize(2)
+            .allMatch(event -> event.getType().equals(hardBreakType));
+        assertThat(finishedSession.getDistance()).isEqualTo(14.3f);
+        assertThat(finishedSession.getEndTime()).isNotNull();
+    }
 
 }
