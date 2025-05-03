@@ -33,6 +33,8 @@ public class DrivingSession extends AuditableEntity {
 
 	private float distance;
 
+	private float score;
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	@JsonIgnoreProperties({ "drivingSessions" })
@@ -86,6 +88,14 @@ public class DrivingSession extends AuditableEntity {
 
 	public void setDistance(float distance) {
 		this.distance = distance;
+	}
+
+	public float getScore() {
+		return score;
+	}
+
+	public void setScore(float score) {
+		this.score = score;
 	}
 
 	public User getUser() {

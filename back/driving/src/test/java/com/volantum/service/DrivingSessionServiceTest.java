@@ -28,6 +28,7 @@ public class DrivingSessionServiceTest {
     private User userTest;
     private Car carTest;
     private EventType hardBreakType;
+    private EventType mediumBreakType;
 
     @Autowired
     private DrivingSessionService drivingSessionService;
@@ -52,6 +53,9 @@ public class DrivingSessionServiceTest {
 
         hardBreakType = new EventType("Hard Brake", EventSeverity.MEDIUM);
 		eventTypeRepository.save(hardBreakType);
+
+        mediumBreakType = new EventType("Medium Brake", EventSeverity.MEDIUM);
+		eventTypeRepository.save(mediumBreakType);
     }
 
     private DrivingSession saveSession(Car car, float distance) {
@@ -153,6 +157,52 @@ public class DrivingSessionServiceTest {
             .allMatch(event -> event.getType().equals(hardBreakType));
         assertThat(finishedSession.getDistance()).isEqualTo(14.3f);
         assertThat(finishedSession.getEndTime()).isNotNull();
+    }
+
+    @Test
+    void shoudSetDrivingSessionScoreWhenIsFinished() {
+        // 1. Create a session (when starting the drive)
+        DrivingSession initialSession = saveSession(carTest, 0f);
+        assertThat(initialSession.getEvents()).isEmpty();
+
+        // 2. Create a session with a hard break and a medium break
+        DrivingSession sessionUpdate = new DrivingSession();
+        sessionUpdate.setDistance(14.3f);
+        
+        Event hardBreak = new Event(hardBreakType, sessionUpdate, 
+            LocalDateTime.now().minusMinutes(5), 20.5f, 10.0f);
+        Event mediumBreak = new Event(mediumBreakType, sessionUpdate, 
+            LocalDateTime.now().minusMinutes(2), 21.0f, 11.0f);
+        sessionUpdate.addEvent(hardBreak);
+        sessionUpdate.addEvent(mediumBreak);
+
+        // 3. End session
+        DrivingSession finishedSession = drivingSessionService.update(initialSession.getId(), sessionUpdate);
+        
+        // 4. Assert that the session score has been updated
+        assertThat(finishedSession.getScore()).isEqualTo(3.8f);
+    }
+
+    @Test
+    void shouldUpdateUserScoreWhenSessionIsFinished() {
+        // 1. Create a session (when starting the drive)
+        DrivingSession initialSession = saveSession(carTest, 0f);
+        assertThat(initialSession.getEvents()).isEmpty();
+
+        // 2. Create a session with a hard break
+        DrivingSession sessionUpdate = new DrivingSession();
+        sessionUpdate.setDistance(14.3f);
+        
+        Event hardBreak = new Event(hardBreakType, sessionUpdate, 
+            LocalDateTime.now().minusMinutes(5), 20.5f, 10.0f);
+        
+        sessionUpdate.addEvent(hardBreak);
+
+        // 3. End session
+        drivingSessionService.update(initialSession.getId(), sessionUpdate);
+
+        // 4. Assert that the user score has been updated
+        assertThat(userTest.getScore()).isEqualTo(4.4f);
     }
 
 }
