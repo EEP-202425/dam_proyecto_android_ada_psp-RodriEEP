@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.volantum.domain.Car;
 import com.volantum.domain.User;
@@ -19,6 +20,7 @@ import com.volantum.driving.VolantumApplication;
 import com.volantum.service.CarService;
 import com.volantum.service.UserService;
 
+@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = VolantumApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CarControllerTest {

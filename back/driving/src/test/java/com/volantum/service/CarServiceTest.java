@@ -1,6 +1,7 @@
 package com.volantum.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,11 +12,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.volantum.domain.Car;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
 
+@ActiveProfiles("test")
 @SpringBootTest(classes = VolantumApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CarServiceTest {

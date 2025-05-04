@@ -10,7 +10,9 @@ import com.volantum.enums.EventSeverity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 public class ScoreCalculatorServiceTest {
 
     private ScoreCalculatorService scoreCalculator;
