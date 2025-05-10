@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.volantum.data.model.Car
-import com.example.volantum.network.VolantumApi
+import com.example.volantum.network.CarApi
 import kotlinx.coroutines.launch
 
 sealed interface CarsUiState {
@@ -26,7 +26,7 @@ class CarsViewModel: ViewModel() {
     private fun getCars() {
         viewModelScope.launch {
             carsUiState = try {
-                val cars = VolantumApi.retrofitService.getCars()
+                val cars = CarApi.retrofitService.getCars()
                 CarsUiState.Success(cars)
             } catch (e: Exception) {
                 CarsUiState.Error(e.message.toString())

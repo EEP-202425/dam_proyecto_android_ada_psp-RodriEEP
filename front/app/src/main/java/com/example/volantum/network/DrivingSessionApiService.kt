@@ -1,6 +1,7 @@
 package com.example.volantum.network
 
 import com.example.volantum.data.model.Car
+import com.example.volantum.data.model.DrivingSession
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -11,7 +12,7 @@ import retrofit2.http.Path
 private const val BASE_URL = "http://192.168.1.121:8080"
 
 // Configuración del serializador Json
-private val json = Json { 
+private val json = Json {
     ignoreUnknownKeys = true
     coerceInputValues = true
 }
@@ -21,17 +22,17 @@ private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .build()
 
-interface VolantumApiService {
-    @GET("api/cars/user/4")
-    suspend fun getCars(): List<Car>
+interface DrivingSessionApiService {
+    @GET("api/sessions/user/4")
+    suspend fun getDrivingSessions(): List<DrivingSession>
 
-    @GET("api/cars/{id}")
-    suspend fun getCarsDetail(@Path(value = "id") id: Int ): Car
+    @GET("api/sessions/{id}")
+    suspend fun getDrivingSessionDetail(@Path(value = "id") id: Int ): DrivingSession
 }
 
-object VolantumApi {
-    val retrofitService: VolantumApiService by lazy {
-        retrofit.create(VolantumApiService::class.java)
+object DrivingSessionApi {
+    val retrofitService: DrivingSessionApiService by lazy {
+        retrofit.create(DrivingSessionApiService::class.java)
     }
 }
 

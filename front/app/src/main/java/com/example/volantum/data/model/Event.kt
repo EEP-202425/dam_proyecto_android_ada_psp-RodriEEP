@@ -9,5 +9,4 @@ data class Event(
     val latitude: Float,
     val longitude: Float,
     val type: EventType,
-    val drivingSession: DrivingSession,
 )

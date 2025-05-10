@@ -11,6 +11,7 @@ import com.example.volantum.ui.components.BottomNavigationBar
 import com.example.volantum.ui.screens.cars.CarsDetailScreen
 import com.example.volantum.ui.screens.cars.CarsScreen
 import com.example.volantum.ui.screens.home.HomeScreen
+import com.example.volantum.ui.screens.sessions.SessionsDetailScreen
 import com.example.volantum.ui.screens.sessions.SessionsScreen
 
 @Composable
@@ -26,12 +27,19 @@ fun App() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(NavigationRouter.Home.route) { HomeScreen() }
-            composable(NavigationRouter.Sessions.route) { SessionsScreen() }
+            composable(NavigationRouter.Sessions.route) { SessionsScreen(navController) }
             composable(NavigationRouter.Cars.route) { CarsScreen(navController) }
             composable(NavigationRouter.CarsDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
                 if (id != null) {
                     CarsDetailScreen(id)
+                } else {
+                }
+            }
+            composable(NavigationRouter.SessionsDetail.route) { backStackEntry ->
+                val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
+                if (id != null) {
+                    SessionsDetailScreen(id)
                 } else {
                 }
             }

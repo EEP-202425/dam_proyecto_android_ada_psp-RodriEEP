@@ -11,5 +11,4 @@ data class Car(
     val yearModel: Int,
     val image: String,
     val mileage: Float,
-    val drivingSessions: List<DrivingSession>
 )

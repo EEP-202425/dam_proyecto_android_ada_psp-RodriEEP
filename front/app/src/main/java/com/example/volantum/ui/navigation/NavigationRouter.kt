@@ -10,4 +10,5 @@ sealed class NavigationRouter(val route: String) {
     object Sessions : NavigationRouter("sessions")
     object Cars : NavigationRouter("cars")
     object CarsDetail: NavigationRouter("cars/{id}")
+    object SessionsDetail: NavigationRouter("sessions/{id}")
 }
