@@ -3,6 +3,7 @@ package com.volantum.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,8 @@ import com.volantum.domain.Event;
 import com.volantum.domain.EventType;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
+import com.volantum.dto.DrivingSessionRequestDTO;
+import com.volantum.dto.EventRequestDTO;
 import com.volantum.enums.EventSeverity;
 import com.volantum.repository.EventTypeRepository;
 
@@ -31,6 +34,7 @@ public class DrivingSessionServiceTest {
     private Car carTest;
     private EventType hardBreakType;
     private EventType mediumBreakType;
+    private DrivingSessionRequestDTO testSessionDTO;
 
     @Autowired
     private DrivingSessionService drivingSessionService;
@@ -58,14 +62,18 @@ public class DrivingSessionServiceTest {
 
         mediumBreakType = new EventType("Medium Brake", EventSeverity.MEDIUM);
 		eventTypeRepository.save(mediumBreakType);
+
+        testSessionDTO = new DrivingSessionRequestDTO(
+            0f,
+            null,
+            userTest.getId(),
+            carTest.getId()
+        );
     }
 
-    private DrivingSession saveSession(Car car, float distance) {
-        DrivingSession session = new DrivingSession(
-           userTest, car
-        );
-        session.setDistance(distance);
-        return drivingSessionService.save(session);
+    private DrivingSession saveSession(Car car) {
+        testSessionDTO.setCarId(car.getId());
+        return drivingSessionService.save(testSessionDTO);
     }
 
     private Car saveNewCar(String plate) {
@@ -76,57 +84,59 @@ public class DrivingSessionServiceTest {
 
     @Test
     void shouldSaveAndRetrieveDrivingSession() {
-        DrivingSession saved = saveSession(carTest, 14.3f);
+        DrivingSession saved = saveSession(carTest);
 
         assertThat(saved).isNotNull();
         Optional<DrivingSession> session = drivingSessionService.findById(saved.getId());
         assertThat(session)
             .isPresent()
-            .hasValueSatisfying(s -> assertThat(s.getDistance()).isEqualTo(14.3f));
+            .hasValueSatisfying(s -> assertThat(s.getDistance()).isEqualTo(0f));
     }
 
     @Test
     void shouldFindAllSessionsByUserId() {
-        saveSession(carTest, 14.3f);
-        saveSession(carTest, 20.5f);
+        saveSession(carTest);
+        saveSession(carTest);
 
         assertThat(drivingSessionService.findByUserId(userTest.getId()))
             .hasSize(2)
             .extracting(DrivingSession::getDistance)
-            .containsExactlyInAnyOrder(14.3f, 20.5f);
+            .containsExactlyInAnyOrder(0f, 0f);
     }
 
     @Test
     void shouldFindAllSessionsByCarId() {
-        saveSession(carTest, 14.3f);
+        saveSession(carTest);
         Car otherCar = saveNewCar("XYZ789");
-        saveSession(otherCar, 20.5f);
+        saveSession(otherCar);
 
         assertThat(drivingSessionService.findByCarId(otherCar.getId()))
             .hasSize(1)
-            .extracting(DrivingSession::getDistance)
-            .containsExactly(20.5f);
+            .extracting(DrivingSession::getCar)
+            .containsExactly(otherCar);
     }
 
     @Test
     void shouldFindAllSessionsByUserIdAndCarId() {
-        saveSession(carTest, 14.3f);
+        saveSession(carTest);
         Car otherCar = saveNewCar("XYZ789");
-        saveSession(otherCar, 20.5f);
+        saveSession(otherCar);
 
         assertThat(drivingSessionService.findByUserIdAndCarId(
             userTest.getId(), otherCar.getId()
         ))
         .hasSize(1)
-        .extracting(DrivingSession::getDistance)
-        .containsExactly(20.5f);
+        .extracting(DrivingSession::getCar)
+        .containsExactly(otherCar);
     }
 
     @Test
     void shouldUpdateDrivingSession() {
-        DrivingSession savedSession = saveSession(carTest, 14.3f);
-        savedSession.setDistance(20.5f);
-        DrivingSession updatedSession = drivingSessionService.update(savedSession.getId(), savedSession);
+        DrivingSession savedSession = saveSession(carTest);
+        
+        testSessionDTO.setDistance(20.5f);
+        
+        DrivingSession updatedSession = drivingSessionService.update(savedSession.getId(), testSessionDTO);
         assertThat(updatedSession).isNotNull();
         assertThat(updatedSession.getDistance()).isEqualTo(20.5f);
     }
@@ -134,28 +144,26 @@ public class DrivingSessionServiceTest {
     @Test
     void shouldSetEventsWhenFinishingSession() {
         // 1. Create a session (when starting the drive)
-        DrivingSession initialSession = saveSession(carTest, 0f);
+        DrivingSession initialSession = saveSession(carTest);
         assertThat(initialSession.getEvents()).isEmpty();
         
         // 2. Prepare the session update with final data (simulating ending the drive)
-        DrivingSession sessionUpdate = new DrivingSession();
-        sessionUpdate.setDistance(14.3f);
-        
-        // 3. Create events that happened during the drive
         Event hardBreak1 = new Event(hardBreakType, initialSession, 
             LocalDateTime.now().minusMinutes(5), 20.5f, 10.0f);
-        Event hardBreak2 = new Event(hardBreakType, initialSession, 
-            LocalDateTime.now().minusMinutes(2), 21.0f, 11.0f);
+            
+        testSessionDTO.setEvents(List.of(new EventRequestDTO(
+            hardBreak1.getTimestamp(),
+            hardBreak1.getLatitude(),
+            hardBreak1.getLongitude(),
+            hardBreak1.getType().getId()
+        )));
+        testSessionDTO.setDistance(14.3f);
         
-        // 4. Add events to the session update
-        sessionUpdate.addEvent(hardBreak1);
-        sessionUpdate.addEvent(hardBreak2);
-        
-        // 5. End session
-        DrivingSession finishedSession = drivingSessionService.update(initialSession.getId(), sessionUpdate);
+        // 3. End session
+        DrivingSession finishedSession = drivingSessionService.update(initialSession.getId(), testSessionDTO);
         
         assertThat(finishedSession.getEvents())
-            .hasSize(2)
+            .hasSize(1)
             .allMatch(event -> event.getType().equals(hardBreakType));
         assertThat(finishedSession.getDistance()).isEqualTo(14.3f);
         assertThat(finishedSession.getEndTime()).isNotNull();
@@ -164,22 +172,27 @@ public class DrivingSessionServiceTest {
     @Test
     void shoudSetDrivingSessionScoreWhenIsFinished() {
         // 1. Create a session (when starting the drive)
-        DrivingSession initialSession = saveSession(carTest, 0f);
+        DrivingSession initialSession = saveSession(carTest);
         assertThat(initialSession.getEvents()).isEmpty();
 
-        // 2. Create a session with a hard break and a medium break
-        DrivingSession sessionUpdate = new DrivingSession();
-        sessionUpdate.setDistance(14.3f);
-        
-        Event hardBreak = new Event(hardBreakType, sessionUpdate, 
-            LocalDateTime.now().minusMinutes(5), 20.5f, 10.0f);
-        Event mediumBreak = new Event(mediumBreakType, sessionUpdate, 
-            LocalDateTime.now().minusMinutes(2), 21.0f, 11.0f);
-        sessionUpdate.addEvent(hardBreak);
-        sessionUpdate.addEvent(mediumBreak);
+        // 2. Prepare the session update with final data (simulating ending the drive)
+        testSessionDTO.setEvents(List.of(
+            new EventRequestDTO(
+                LocalDateTime.now().minusMinutes(5),
+                20.5f,
+                10.0f,
+                mediumBreakType.getId()
+            ),
+            new EventRequestDTO(
+                LocalDateTime.now().minusMinutes(2),
+                21.0f,
+                11.0f,
+                hardBreakType.getId()
+            )
+        ));
 
         // 3. End session
-        DrivingSession finishedSession = drivingSessionService.update(initialSession.getId(), sessionUpdate);
+        DrivingSession finishedSession = drivingSessionService.update(initialSession.getId(), testSessionDTO);
         
         // 4. Assert that the session score has been updated
         assertThat(finishedSession.getScore()).isEqualTo(3.8f);
@@ -188,20 +201,22 @@ public class DrivingSessionServiceTest {
     @Test
     void shouldUpdateUserScoreWhenSessionIsFinished() {
         // 1. Create a session (when starting the drive)
-        DrivingSession initialSession = saveSession(carTest, 0f);
+        DrivingSession initialSession = saveSession(carTest);
         assertThat(initialSession.getEvents()).isEmpty();
 
         // 2. Create a session with a hard break
-        DrivingSession sessionUpdate = new DrivingSession();
-        sessionUpdate.setDistance(14.3f);
-        
-        Event hardBreak = new Event(hardBreakType, sessionUpdate, 
+        Event hardBreak = new Event(hardBreakType, initialSession, 
             LocalDateTime.now().minusMinutes(5), 20.5f, 10.0f);
-        
-        sessionUpdate.addEvent(hardBreak);
+            
+        testSessionDTO.setEvents(List.of(new EventRequestDTO(
+            hardBreak.getTimestamp(),
+            hardBreak.getLatitude(),
+            hardBreak.getLongitude(),
+            hardBreak.getType().getId()
+        )));
 
         // 3. End session
-        drivingSessionService.update(initialSession.getId(), sessionUpdate);
+        drivingSessionService.update(initialSession.getId(), testSessionDTO);
 
         // 4. Assert that the user score has been updated
         assertThat(userTest.getScore()).isEqualTo(4.4f);

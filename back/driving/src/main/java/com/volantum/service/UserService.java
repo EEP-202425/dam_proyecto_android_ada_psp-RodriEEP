@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.volantum.domain.User;
+import com.volantum.dto.UserResponseDTO;
 import com.volantum.repository.UserRepository;
 
 @Service
@@ -54,5 +55,16 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public void deleteAll() {
 		userRepository.deleteAll();
+	}
+
+	@Override
+	public UserResponseDTO convertToDTO(User user) {
+		return new UserResponseDTO(
+			user.getId(),
+			user.getFirstName(),
+			user.getLastName(),
+			user.getEmail(),
+			user.getScore()
+		);
 	}
 }

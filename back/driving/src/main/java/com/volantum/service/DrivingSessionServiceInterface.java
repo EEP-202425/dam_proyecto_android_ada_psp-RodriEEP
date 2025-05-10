@@ -3,7 +3,6 @@ package com.volantum.service;
 import java.util.List;
 
 import com.volantum.domain.DrivingSession;
-
 public interface DrivingSessionServiceInterface {
 
 	List<DrivingSession> findByUserId(int userId);

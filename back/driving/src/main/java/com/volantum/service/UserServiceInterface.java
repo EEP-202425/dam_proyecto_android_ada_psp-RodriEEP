@@ -3,6 +3,7 @@ package com.volantum.service;
 import java.util.Optional;
 
 import com.volantum.domain.User;
+import com.volantum.dto.UserResponseDTO;
 
 public interface UserServiceInterface {
 	User register(User user);
@@ -11,4 +12,5 @@ public interface UserServiceInterface {
     Optional<User> findByEmail(String email);
     Optional<User> findById(int id);
     void deleteAll();
+    UserResponseDTO convertToDTO(User user);
 }

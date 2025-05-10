@@ -17,6 +17,7 @@ import com.volantum.domain.Car;
 import com.volantum.domain.DrivingSession;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
+import com.volantum.dto.DrivingSessionRequestDTO;
 import com.volantum.service.CarService;
 import com.volantum.service.DrivingSessionService;
 import com.volantum.service.UserService;
@@ -51,29 +52,32 @@ class DrivingSessionControllerTest {
 		testCar = new Car("XRT234");
 	}
 
-	DrivingSession createSession() {
+	DrivingSessionRequestDTO createSession() {
 		User user = userService.register(testUser);
 		Car car = carService.save(testCar);
-		DrivingSession session = new DrivingSession(user, car);
+		DrivingSessionRequestDTO session = new DrivingSessionRequestDTO(
+			14.3f,
+			null,
+			user.getId(),
+			car.getId());
 		return session;
 	}
 
 	@Test
 	void testCreateSession() {
-		DrivingSession session = createSession();
+		DrivingSessionRequestDTO session = createSession();
 		
 		ResponseEntity<DrivingSession> response = restTemplate.postForEntity("/api/sessions", session, DrivingSession.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		DrivingSession sessionFromResponse = response.getBody();
 
-		assertEquals(session.getUser().getId(), sessionFromResponse.getUser().getId());
-		assertEquals(session.getCar().getId(), sessionFromResponse.getCar().getId());
-		assertEquals(session.getStartTime(), sessionFromResponse.getStartTime());
+		assertEquals(session.getUserId(), sessionFromResponse.getUser().getId());
+		assertEquals(session.getCarId(), sessionFromResponse.getCar().getId());
 	}
 
 	@Test
 	void testGetSessionById() {
-		DrivingSession session = createSession();
+		DrivingSessionRequestDTO session = createSession();
 		DrivingSession savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSession.class).getBody();
 		
 		ResponseEntity<DrivingSession> response = restTemplate.getForEntity("/api/sessions/" + savedSession.getId(), DrivingSession.class);
@@ -87,7 +91,7 @@ class DrivingSessionControllerTest {
 
 	@Test
 	void testGetSessionsByUserId() {
-		DrivingSession session = createSession();
+		DrivingSessionRequestDTO session = createSession();
 
 		DrivingSession savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSession.class).getBody();
 		
@@ -101,7 +105,7 @@ class DrivingSessionControllerTest {
 
 	@Test
 	void testGetSessionsByCarId() {
-		DrivingSession session = createSession();
+		DrivingSessionRequestDTO session = createSession();
 		
 		DrivingSession savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSession.class).getBody();
 
@@ -115,18 +119,23 @@ class DrivingSessionControllerTest {
 
 	@Test
 	void testFinishSession() {
-		DrivingSession session = createSession();
+		DrivingSessionRequestDTO session = createSession();
 		DrivingSession savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSession.class).getBody();
 		
-		savedSession.setDistance(100);
+		DrivingSessionRequestDTO updateDTO = new DrivingSessionRequestDTO(
+			100f,
+			null,
+			savedSession.getUser().getId(),
+			savedSession.getCar().getId()
+		);
 
-		restTemplate.put("/api/sessions/" + savedSession.getId(), savedSession);
+		restTemplate.put("/api/sessions/" + savedSession.getId(), updateDTO);
 
 		ResponseEntity<DrivingSession> response = restTemplate.getForEntity("/api/sessions/" + savedSession.getId(), DrivingSession.class);
 		DrivingSession updatedSession = response.getBody();
 
 		assertEquals(savedSession.getId(), updatedSession.getId());
-		assertEquals(savedSession.getDistance(), updatedSession.getDistance());
+		assertEquals(100f, updatedSession.getDistance());
 		assertNotSame(savedSession.getEndTime(), updatedSession.getEndTime());
 	}
 	

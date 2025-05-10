@@ -24,6 +24,9 @@ public class EventType extends AuditableEntity {
 	@Column(nullable = false)
 	private EventSeverity severity;
 
+	public EventType() {
+	}
+
 	public EventType(String name, EventSeverity severity) {
 		this.name = name;
 		this.severity = severity;

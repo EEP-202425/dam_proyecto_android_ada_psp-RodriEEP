@@ -17,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.volantum.domain.Car;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
+import com.volantum.dto.CarResponseDTO;
 import com.volantum.service.CarService;
 import com.volantum.service.UserService;
 
@@ -47,20 +48,20 @@ class CarControllerTest {
 
     @Test
 	void testSaveCar() {
-		ResponseEntity<Car> response = restTemplate.postForEntity("/api/cars", testCar, Car.class);
+		ResponseEntity<CarResponseDTO> response = restTemplate.postForEntity("/api/cars/user/" + testUser.getId(), testCar, CarResponseDTO.class, testUser.getId());
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		Car carSaved = response.getBody();
+		CarResponseDTO carSaved = response.getBody();
 		assertEquals(testCar.getPlate(), carSaved.getPlate());
 	}
 
 	@Test
 	void testCarById() {
-		ResponseEntity<Car> response = restTemplate.postForEntity("/api/cars", testCar, Car.class);
-		Car carSaved = response.getBody();
-		ResponseEntity<Car> responseById = restTemplate.getForEntity("/api/cars/" + carSaved.getId(), Car.class);
+		ResponseEntity<CarResponseDTO> response = restTemplate.postForEntity("/api/cars/user/" + testUser.getId(), testCar, CarResponseDTO.class);
+		CarResponseDTO carSaved = response.getBody();
+		ResponseEntity<CarResponseDTO> responseById = restTemplate.getForEntity("/api/cars/" + carSaved.getId(), CarResponseDTO.class);
 		assertEquals(HttpStatus.OK, responseById.getStatusCode());
 
-		Car carFounded = response.getBody();
+		CarResponseDTO carFounded = responseById.getBody();
 		assertNotNull(carFounded);
 		
 		assertEquals(testCar.getPlate(), carFounded.getPlate());
@@ -68,22 +69,22 @@ class CarControllerTest {
 
 	@Test
 	void testAddCarToUser() {
-		ResponseEntity<Car> response = restTemplate.postForEntity("/api/cars/user/" + testUser.getId(), testCar, Car.class);
+		ResponseEntity<CarResponseDTO> response = restTemplate.postForEntity("/api/cars/user/" + testUser.getId(), testCar, CarResponseDTO.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
-		Car carSaved = response.getBody();
+		CarResponseDTO carSaved = response.getBody();
 		
 		assertEquals(testCar.getPlate(), carSaved.getPlate());
 	}
 
 	@Test
 	void testCarsByUser() {
-		restTemplate.postForEntity("/api/cars/user/" + testUser.getId(), testCar, Car.class);
-		ResponseEntity<Car[]> response = restTemplate.getForEntity("/api/cars/user/" + testUser.getId(), Car[].class);
+		restTemplate.postForEntity("/api/cars/user/" + testUser.getId(), testCar, CarResponseDTO.class);
+		ResponseEntity<CarResponseDTO[]> response = restTemplate.getForEntity("/api/cars/user/" + testUser.getId(), CarResponseDTO[].class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 				
-		Car[] carsFromResponse = response.getBody();
+		CarResponseDTO[] carsFromResponse = response.getBody();
 		assertNotNull(carsFromResponse);
 		
 		assertEquals(1, carsFromResponse.length);
@@ -91,7 +92,7 @@ class CarControllerTest {
 
 	@Test
 	void testAddCarToUserWithInvalidUser() {
-		ResponseEntity<Car> response = restTemplate.postForEntity("/api/cars/user/999", testCar, Car.class);
+		ResponseEntity<CarResponseDTO> response = restTemplate.postForEntity("/api/cars/user/999", testCar, CarResponseDTO.class);
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}
 

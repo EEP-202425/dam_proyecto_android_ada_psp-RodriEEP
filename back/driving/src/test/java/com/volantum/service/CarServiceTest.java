@@ -17,13 +17,14 @@ import org.springframework.test.context.ActiveProfiles;
 import com.volantum.domain.Car;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
+import com.volantum.dto.CarRequestDTO;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = VolantumApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CarServiceTest {
 	User testUser;
-	Car testCar;
+	CarRequestDTO carTest;
 	
 	@Autowired
 	CarService carService;
@@ -39,36 +40,35 @@ class CarServiceTest {
 	@BeforeEach
 	void setUpBeforeEach() {
 		carService.deleteAll();
-		testCar = new Car("XRT234");
+		carTest = new CarRequestDTO("XRT234", "Toyota", "Corolla", 2020, null, 0.0);
 	}
 	
 	@Test
 	void testAddCarToUser() {
-		Car savedCar = carService.addCarToUser(testCar, testUser);
-		assertEquals(testCar, savedCar);
+		Car savedCar = carService.addCarToUser(carTest, testUser);
+		assertEquals(carTest.getPlate(), savedCar.getPlate());
 	}
 
 	@Test
 	void findByPlateTest() {
-		carService.addCarToUser(testCar, testUser);
-		Optional<Car> carOpt = carService.findByPlate(testCar.getPlate());
+		carService.addCarToUser(carTest, testUser);
+		Optional<Car> carOpt = carService.findByPlate(carTest.getPlate());
 		assertNotNull(carOpt);
-		assertEquals("XRT234", carOpt.get().getPlate());
+		assertEquals(carTest.getPlate(), carOpt.get().getPlate());
 	}
 	
 	@Test
 	void carsByUserIdTest() {
-		carService.addCarToUser(testCar, testUser);
+		carService.addCarToUser(carTest, testUser);
 		List<Car> cars = carService.carsByUserId(testUser.getId());
-		assertEquals("XRT234", cars.get(0).getPlate());
+		assertEquals(carTest.getPlate(), cars.get(0).getPlate());
 	}
 	
 	@Test
 	void userCanHaveManyCars() {
-		Car testCar2 = new Car("ORM343");
-		
-		carService.addCarToUser(testCar, testUser);
-		carService.addCarToUser(testCar2, testUser);
+		carService.addCarToUser(carTest, testUser);
+		CarRequestDTO carTest2 = new CarRequestDTO("ORM343", "Toyota", "Corolla", 2020, null, 0.0);
+		carService.addCarToUser(carTest2, testUser);
 		
 		List<Car> cars = carService.carsByUserId(testUser.getId());
 
