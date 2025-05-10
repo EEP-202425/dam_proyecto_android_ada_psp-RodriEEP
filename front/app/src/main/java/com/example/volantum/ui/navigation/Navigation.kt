@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.volantum.ui.components.BottomNavigationBar
+import com.example.volantum.ui.screens.cars.CarsDetailScreen
 import com.example.volantum.ui.screens.cars.CarsScreen
 import com.example.volantum.ui.screens.home.HomeScreen
 import com.example.volantum.ui.screens.sessions.SessionsScreen
@@ -21,12 +22,19 @@ fun App() {
     ) { paddingValues ->
         NavHost(
             navController,
-            startDestination = BottomNavigationItem.Home.route,
+            startDestination = NavigationRouter.Home.route,
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable(BottomNavigationItem.Home.route) { HomeScreen() }
-            composable(BottomNavigationItem.Sessions.route) { SessionsScreen() }
-            composable(BottomNavigationItem.Cars.route) { CarsScreen() }
+            composable(NavigationRouter.Home.route) { HomeScreen() }
+            composable(NavigationRouter.Sessions.route) { SessionsScreen() }
+            composable(NavigationRouter.Cars.route) { CarsScreen(navController) }
+            composable(NavigationRouter.CarsDetail.route) { backStackEntry ->
+                val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
+                if (id != null) {
+                    CarsDetailScreen(id)
+                } else {
+                }
+            }
         }
     }
 }
