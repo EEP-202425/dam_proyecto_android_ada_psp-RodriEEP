@@ -1,5 +1,8 @@
 package com.example.volantum.data.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class DrivingSession(
     val id: Int,
     val startTime: String,

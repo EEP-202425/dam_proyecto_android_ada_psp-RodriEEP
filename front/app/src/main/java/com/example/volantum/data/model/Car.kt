@@ -1,5 +1,8 @@
 package com.example.volantum.data.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Car(
     val id: Int,
     val plate: String,
@@ -8,6 +11,5 @@ data class Car(
     val yearModel: Int,
     val image: String,
     val mileage: Float,
-    val user: User,
     val drivingSessions: List<DrivingSession>
 )
