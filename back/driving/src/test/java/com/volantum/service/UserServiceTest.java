@@ -13,11 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.volantum.domain.Car;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
+import com.volantum.dto.CarRequestDTO;
+import com.volantum.dto.DrivingSessionRequestDTO;
+
+import jakarta.transaction.Transactional;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = VolantumApplication.class)
+@Transactional
 public class UserServiceTest {
 
 	private User testUser;
@@ -25,9 +31,17 @@ public class UserServiceTest {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private CarService carService;
+
+	@Autowired
+	private DrivingSessionService drivingSessionService;
+
 	@BeforeEach
 	void setUp() {
 		userService.deleteAll();
+		carService.deleteAll();
+		drivingSessionService.deleteAll();
 		testUser = new User("Laura", "Peréz", "laura@volantum.com", "abc123");
 	}
 	
@@ -60,6 +74,29 @@ public class UserServiceTest {
 		RuntimeException ex = assertThrows(RuntimeException.class,
 				() -> userService.login(testUser.getEmail(), "12345678"));
 		assertEquals("Credenciales Inválidas", ex.getMessage());
+	}
+
+	@Test
+	void testUserProfile() {
+		userService.register(testUser);
+
+		CarRequestDTO car = new CarRequestDTO("XRT234", "Toyota", "Corolla", 2020, null, 0.0);
+		Car savedCar = carService.addCarToUser(car, testUser);
+
+		DrivingSessionRequestDTO session1 = new DrivingSessionRequestDTO(0.0f, null, testUser.getId(), savedCar.getId());
+		drivingSessionService.save(session1);
+
+		DrivingSessionRequestDTO session2 = new DrivingSessionRequestDTO(0.0f, null, testUser.getId(), savedCar.getId());
+		drivingSessionService.save(session2);
+
+		User user = userService.findByEmail(testUser.getEmail()).orElseThrow();
+
+		assertEquals("Laura", user.getFirstName());
+		assertEquals("Peréz", user.getLastName());
+		assertEquals("laura@volantum.com", user.getEmail());
+
+		assertEquals(1, user.getCars().size());
+		assertEquals(2, user.getDrivingSessions().size());
 	}
 
 }

@@ -3,7 +3,6 @@ package com.volantum.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -15,8 +14,6 @@ import com.volantum.domain.User;
 import com.volantum.dto.DrivingSessionRequestDTO;
 import com.volantum.dto.DrivingSessionResponseDTO;
 import com.volantum.dto.EventRequestDTO;
-import com.volantum.dto.EventResponseDTO;
-import com.volantum.dto.EventTypeResponseDTO;
 import com.volantum.repository.CarRepository;
 import com.volantum.repository.DrivingSessionRepository;
 import com.volantum.repository.EventRepository;
@@ -30,16 +27,16 @@ public class DrivingSessionService implements DrivingSessionServiceInterface {
 	private final EventTypeRepository eventTypeRepository;
 	private final ScoreCalculatorService scoreCalculatorService;
 	private final UserService userService;
-	private final CarService carService;
+	private final DTOConverterService dtoConverterService;
 	private final UserRepository userRepository;
 	private final CarRepository carRepository;
 
-	public DrivingSessionService(DrivingSessionRepository repository, EventTypeRepository eventTypeRepository, EventRepository eventRepository, ScoreCalculatorService scoreCalculatorService, UserService userService, CarService carService, UserRepository userRepository, CarRepository carRepository) {
+	public DrivingSessionService(DrivingSessionRepository repository, EventTypeRepository eventTypeRepository, EventRepository eventRepository, ScoreCalculatorService scoreCalculatorService, UserService userService, DTOConverterService dtoConverterService, UserRepository userRepository, CarRepository carRepository) {
 		this.drivingSessionRepository = repository;
 		this.eventTypeRepository = eventTypeRepository;
 		this.scoreCalculatorService = scoreCalculatorService;
 		this.userService = userService;
-		this.carService = carService;
+		this.dtoConverterService = dtoConverterService;
 		this.userRepository = userRepository;
 		this.carRepository = carRepository;
 	}
@@ -50,6 +47,7 @@ public class DrivingSessionService implements DrivingSessionServiceInterface {
         Car car = carRepository.findById(dto.getCarId()).orElseThrow();
 
         DrivingSession session = new DrivingSession(user, car);
+        user.addDrivingSession(session);
 		
 		return drivingSessionRepository.save(session);
 	}
@@ -122,34 +120,6 @@ public class DrivingSessionService implements DrivingSessionServiceInterface {
 	}
 
 	public DrivingSessionResponseDTO convertToDTO(DrivingSession session) {
-		DrivingSessionResponseDTO dto = new DrivingSessionResponseDTO();
-		dto.setId(session.getId());
-		dto.setStartTime(session.getStartTime());
-		dto.setEndTime(session.getEndTime());
-		dto.setDistance(session.getDistance());
-		dto.setScore(session.getScore());
-		dto.setEvents(session.getEvents().stream().map(this::convertEventToDTO).collect(Collectors.toList()));
-		dto.setUser(userService.convertToDTO(session.getUser()));
-		dto.setCar(carService.convertToDTO(session.getCar()));
-		return dto;
-	}
-
-	public EventResponseDTO convertEventToDTO(Event event) {
-		EventResponseDTO dto = new EventResponseDTO();
-		dto.setId(event.getId());
-		dto.setTimestamp(event.getTimestamp());
-		dto.setLatitude(event.getLatitude());
-		dto.setLongitude(event.getLongitude());
-		dto.setType(convertEventTypeToDTO(event.getType()));
-		return dto;
-	}
-
-	public EventTypeResponseDTO convertEventTypeToDTO(EventType eventType) {
-		EventTypeResponseDTO dto = new EventTypeResponseDTO();
-		dto.setId(eventType.getId());
-		dto.setName(eventType.getName());
-		dto.setDescription(eventType.getDescription());
-		dto.setSeverity(eventType.getSeverity());
-		return dto;
+		return dtoConverterService.convertDrivingSessionToDTO(session);
 	}
 }

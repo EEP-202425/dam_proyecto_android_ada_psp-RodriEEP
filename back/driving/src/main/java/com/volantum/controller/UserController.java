@@ -5,6 +5,9 @@ import com.volantum.dto.LoginRequestDTO;
 import com.volantum.dto.RegisterRequestDTO;
 import com.volantum.dto.UserResponseDTO;
 import com.volantum.service.UserService;
+
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,5 +32,15 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
         User user = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
         return ResponseEntity.ok(userService.convertToDTO(user));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUser(@PathVariable int id) {
+        Optional<User> user = userService.findById(id);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(userService.convertToDTO(user.get()));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -15,10 +15,12 @@ import com.volantum.repository.CarRepository;
 @Service
 public class CarService implements CarServiceInterface {
 	private final CarRepository carRepository;
+	private final DTOConverterService dtoConverterService;
 
 	@Autowired
-	public CarService(CarRepository carRepository) {
+	public CarService(CarRepository carRepository, DTOConverterService dtoConverterService) {
 		this.carRepository = carRepository;
+		this.dtoConverterService = dtoConverterService;
 	}
 	
 	public Car addCarToUser(CarRequestDTO car, User user) {
@@ -58,15 +60,7 @@ public class CarService implements CarServiceInterface {
 	}
 
 	public CarResponseDTO convertToDTO(Car car) {
-		return new CarResponseDTO(
-			car.getId(),
-			car.getPlate(),
-			car.getBrand(),
-			car.getModel(),
-			car.getYearModel(),
-			car.getImage(),
-			car.getMileage()
-		);
+		return dtoConverterService.convertCarToDTO(car);
 	}
 
 }
