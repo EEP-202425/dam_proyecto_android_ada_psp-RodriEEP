@@ -31,8 +31,8 @@ fun App() {
             modifier = Modifier.fillMaxSize()
         ) {
             composable(NavigationRouter.Home.route) { HomeScreen(navController, paddingValues = paddingValues) }
-            composable(NavigationRouter.Sessions.route) { SessionsScreen(navController) }
-            composable(NavigationRouter.Cars.route) { CarsScreen(navController) }
+            composable(NavigationRouter.Sessions.route) { SessionsScreen(navController, paddingValues = paddingValues) }
+            composable(NavigationRouter.Cars.route) { CarsScreen(navController, paddingValues = paddingValues) }
             composable(NavigationRouter.CarsDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
                 if (id != null) {
