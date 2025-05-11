@@ -62,9 +62,12 @@ public class DTOConverterService {
     public DrivingSessionResponseDTO convertDrivingSessionToDTO(DrivingSession session) {
         return new DrivingSessionResponseDTO(
             session.getId(),
+            session.getDescription(),
             session.getStartTime(),
             session.getEndTime(),
             session.getDistance(),
+            session.getDuration(),
+            session.getAverageSpeed(),
             session.getScore(),
             convertUserToBasicDTO(session.getUser()),
             convertCarToDTO(session.getCar()),

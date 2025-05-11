@@ -12,9 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DrivingSessionResponseDTO {
 	private int id;
+    private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private float distance;
+    private String duration;
+    private float averageSpeed;
     private float score;
     private UserBasicResponseDTO user;
     private CarResponseDTO car;

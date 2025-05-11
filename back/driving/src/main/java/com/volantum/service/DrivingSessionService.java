@@ -1,5 +1,6 @@
 package com.volantum.service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,7 @@ public class DrivingSessionService implements DrivingSessionServiceInterface {
         Car car = carRepository.findById(dto.getCarId()).orElseThrow();
 
         DrivingSession session = new DrivingSession(user, car);
+		session.setDescription("Morning drive");
         user.addDrivingSession(session);
 		
 		return drivingSessionRepository.save(session);
@@ -77,10 +79,26 @@ public class DrivingSessionService implements DrivingSessionServiceInterface {
 		DrivingSession session = drivingSessionRepository.findById(id)
 			.orElseThrow(() -> new RuntimeException("Session not found"));
 		
-		// 2. Set the end time and distance
+		// 2. Set the end time, distance, duration and average speed
 		session.setEndTime(LocalDateTime.now());
 		session.setDistance(dto.getDistance());
 
+		Duration duration = Duration.between(session.getStartTime(), session.getEndTime());
+		long totalSeconds = duration.getSeconds();
+		double hoursFraction = totalSeconds / 3600.0;
+
+		long hours   = totalSeconds / 3600;
+		long minutes = (totalSeconds % 3600) / 60;
+		long seconds = totalSeconds % 60;
+		session.setDuration(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+
+		double speed = 0.0;
+		if (hoursFraction > 0) {
+			speed = dto.getDistance() / hoursFraction;
+		}
+		float roundedSpeed = (float) (Math.round(speed * 10.0) / 10.0);
+		session.setAverageSpeed(roundedSpeed);
+       
 		// 3. Set the events
 		if (dto.getEvents() != null) {
 			for (EventRequestDTO eventDTO : dto.getEvents()) {

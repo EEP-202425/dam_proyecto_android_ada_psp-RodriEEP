@@ -25,13 +25,19 @@ public class DrivingSession extends AuditableEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	private String description;
+
 	@Column(name = "start_time", nullable = false)
 	private LocalDateTime startTime;
 
 	@Column(name = "end_time")
 	private LocalDateTime endTime;
 
+	private String duration;
+
 	private float distance;
+
+	private float averageSpeed;
 
 	private float score;
 
@@ -66,6 +72,14 @@ public class DrivingSession extends AuditableEntity {
 		this.id = id;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public LocalDateTime getStartTime() {
 		return startTime;
 	}
@@ -78,6 +92,14 @@ public class DrivingSession extends AuditableEntity {
 		return endTime;
 	}
 
+	public String getDuration() {
+		return duration;
+	}
+
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
+
 	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
@@ -88,6 +110,14 @@ public class DrivingSession extends AuditableEntity {
 
 	public void setDistance(float distance) {
 		this.distance = distance;
+	}
+
+	public float getAverageSpeed() {
+		return averageSpeed;
+	}
+
+	public void setAverageSpeed(float averageSpeed) {
+		this.averageSpeed = averageSpeed;
 	}
 
 	public float getScore() {
