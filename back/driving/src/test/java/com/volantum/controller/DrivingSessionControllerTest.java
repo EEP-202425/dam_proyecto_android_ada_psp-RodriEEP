@@ -14,10 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.volantum.domain.Car;
-import com.volantum.domain.DrivingSession;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
 import com.volantum.dto.DrivingSessionRequestDTO;
+import com.volantum.dto.DrivingSessionResponseDTO;
 import com.volantum.service.CarService;
 import com.volantum.service.DrivingSessionService;
 import com.volantum.service.UserService;
@@ -67,25 +67,25 @@ class DrivingSessionControllerTest {
 	void testCreateSession() {
 		DrivingSessionRequestDTO session = createSession();
 		
-		ResponseEntity<DrivingSession> response = restTemplate.postForEntity("/api/sessions", session, DrivingSession.class);
+		ResponseEntity<DrivingSessionResponseDTO> response = restTemplate.postForEntity("/api/sessions", session, DrivingSessionResponseDTO.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		DrivingSession sessionFromResponse = response.getBody();
+		DrivingSessionResponseDTO sessionFromResponse = response.getBody();
 
-		assertEquals(session.getUserId(), sessionFromResponse.getUser().getId());
 		assertEquals(session.getCarId(), sessionFromResponse.getCar().getId());
 	}
 
 	@Test
 	void testGetSessionById() {
 		DrivingSessionRequestDTO session = createSession();
-		DrivingSession savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSession.class).getBody();
+		DrivingSessionResponseDTO savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSessionResponseDTO.class).getBody();
 		
-		ResponseEntity<DrivingSession> response = restTemplate.getForEntity("/api/sessions/" + savedSession.getId(), DrivingSession.class);
+		System.out.println(savedSession.getId());
+		
+		ResponseEntity<DrivingSessionResponseDTO> response = restTemplate.getForEntity("/api/sessions/" + savedSession.getId(), DrivingSessionResponseDTO.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		DrivingSession sessionFromResponse = response.getBody();
+		DrivingSessionResponseDTO sessionFromResponse = response.getBody();
 
 		assertEquals(savedSession.getId(), sessionFromResponse.getId());
-		assertEquals(savedSession.getUser().getId(), sessionFromResponse.getUser().getId());
 		assertEquals(savedSession.getCar().getId(), sessionFromResponse.getCar().getId());
 	}
 
@@ -93,11 +93,11 @@ class DrivingSessionControllerTest {
 	void testGetSessionsByUserId() {
 		DrivingSessionRequestDTO session = createSession();
 
-		DrivingSession savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSession.class).getBody();
+		DrivingSessionResponseDTO savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSessionResponseDTO.class).getBody();
 		
-		ResponseEntity<DrivingSession[]> response = restTemplate.getForEntity("/api/sessions/user/" + testUser.getId(), DrivingSession[].class);
+		ResponseEntity<DrivingSessionResponseDTO[]> response = restTemplate.getForEntity("/api/sessions/user/" + testUser.getId(), DrivingSessionResponseDTO[].class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		DrivingSession[] sessionsFromResponse = response.getBody();
+		DrivingSessionResponseDTO[] sessionsFromResponse = response.getBody();
 		
 		assertEquals(1, sessionsFromResponse.length);
 		assertEquals(savedSession.getId(), sessionsFromResponse[0].getId());
@@ -107,11 +107,11 @@ class DrivingSessionControllerTest {
 	void testGetSessionsByCarId() {
 		DrivingSessionRequestDTO session = createSession();
 		
-		DrivingSession savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSession.class).getBody();
+		DrivingSessionResponseDTO savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSessionResponseDTO.class).getBody();
 
-		ResponseEntity<DrivingSession[]> response = restTemplate.getForEntity("/api/sessions/car/" + testCar.getId(), DrivingSession[].class);
+		ResponseEntity<DrivingSessionResponseDTO[]> response = restTemplate.getForEntity("/api/sessions/car/" + testCar.getId(), DrivingSessionResponseDTO[].class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		DrivingSession[] sessionsFromResponse = response.getBody();
+		DrivingSessionResponseDTO[] sessionsFromResponse = response.getBody();
 		
 		assertEquals(1, sessionsFromResponse.length);
 		assertEquals(savedSession.getId(), sessionsFromResponse[0].getId());
@@ -120,7 +120,7 @@ class DrivingSessionControllerTest {
 	@Test
 	void testFinishSession() {
 		DrivingSessionRequestDTO session = createSession();
-		DrivingSession savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSession.class).getBody();
+		DrivingSessionResponseDTO savedSession = restTemplate.postForEntity("/api/sessions", session, DrivingSessionResponseDTO.class).getBody();
 		
 		DrivingSessionRequestDTO updateDTO = new DrivingSessionRequestDTO(
 			100f,
@@ -131,8 +131,8 @@ class DrivingSessionControllerTest {
 
 		restTemplate.put("/api/sessions/" + savedSession.getId(), updateDTO);
 
-		ResponseEntity<DrivingSession> response = restTemplate.getForEntity("/api/sessions/" + savedSession.getId(), DrivingSession.class);
-		DrivingSession updatedSession = response.getBody();
+		ResponseEntity<DrivingSessionResponseDTO> response = restTemplate.getForEntity("/api/sessions/" + savedSession.getId(), DrivingSessionResponseDTO.class);
+		DrivingSessionResponseDTO updatedSession = response.getBody();
 
 		assertEquals(savedSession.getId(), updatedSession.getId());
 		assertEquals(100f, updatedSession.getDistance());

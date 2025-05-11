@@ -37,6 +37,16 @@ public class DTOConverterService {
         return dto;
     }
 
+    public UserBasicResponseDTO convertUserToBasicDTO(User user) {
+        return new UserBasicResponseDTO(
+            user.getId(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getEmail(),
+            user.getScore()
+        );
+    }
+
     public CarResponseDTO convertCarToDTO(Car car) {
         return new CarResponseDTO(
             car.getId(),
@@ -56,7 +66,7 @@ public class DTOConverterService {
             session.getEndTime(),
             session.getDistance(),
             session.getScore(),
-            convertUserToDTO(session.getUser()),
+            convertUserToBasicDTO(session.getUser()),
             convertCarToDTO(session.getCar()),
             session.getEvents().stream().map(this::convertEventToDTO).collect(Collectors.toList())
         );

@@ -16,7 +16,7 @@ public class DrivingSessionResponseDTO {
     private LocalDateTime endTime;
     private float distance;
     private float score;
-    private UserResponseDTO user;
+    private UserBasicResponseDTO user;
     private CarResponseDTO car;
     private List<EventResponseDTO> events;
 }
