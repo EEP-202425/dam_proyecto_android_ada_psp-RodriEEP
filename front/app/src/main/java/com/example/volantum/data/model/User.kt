@@ -9,4 +9,6 @@ data class User(
     val lastName: String,
     val email: String,
     val score: Double,
+    val cars: List<Car>?,
+    val drivingSessions: List<DrivingSession>?
 )
