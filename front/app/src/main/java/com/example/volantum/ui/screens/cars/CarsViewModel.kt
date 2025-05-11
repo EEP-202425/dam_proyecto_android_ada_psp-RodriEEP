@@ -10,7 +10,7 @@ import com.example.volantum.network.CarApi
 import kotlinx.coroutines.launch
 
 sealed interface CarsUiState {
-    data class Success(val cars: List<Car>) : CarsUiState, CarsDetailUiState
+    data class Success(val cars: List<Car>) : CarsUiState
     data class Error(val message: String) : CarsUiState
     object Loading : CarsUiState
 }

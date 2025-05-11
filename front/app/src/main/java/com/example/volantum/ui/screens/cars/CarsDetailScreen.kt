@@ -65,7 +65,5 @@ fun CarsDetailScreen(carId: Int) {
                 )
             }
         }
-
-        is CarsUiState.Success -> TODO()
     }
 }

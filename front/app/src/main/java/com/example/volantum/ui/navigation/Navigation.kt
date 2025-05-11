@@ -26,7 +26,7 @@ fun App() {
             startDestination = NavigationRouter.Home.route,
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable(NavigationRouter.Home.route) { HomeScreen() }
+            composable(NavigationRouter.Home.route) { HomeScreen(navController) }
             composable(NavigationRouter.Sessions.route) { SessionsScreen(navController) }
             composable(NavigationRouter.Cars.route) { CarsScreen(navController) }
             composable(NavigationRouter.CarsDetail.route) { backStackEntry ->
