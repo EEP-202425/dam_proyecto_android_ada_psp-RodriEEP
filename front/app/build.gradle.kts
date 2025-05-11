@@ -71,4 +71,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
 
+    //Icons
+    implementation(libs.iconics.core.v534)
+    implementation(libs.iconics.compose)
+    implementation(libs.fontawesome.typeface.v51331kotlin)
+
 }

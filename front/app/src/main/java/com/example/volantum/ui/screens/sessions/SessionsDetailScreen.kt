@@ -2,6 +2,7 @@ package com.example.volantum.ui.screens.sessions
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,9 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun SessionsDetailScreen(carId: Int) {
+fun SessionsDetailScreen(
+    sessionId: Int,
+    paddingValues: PaddingValues
+) {
     val viewModel: SessionsDetailViewModel = viewModel(
-        factory = SessionsDetailViewModelFactory(carId)
+        factory = SessionsDetailViewModelFactory(sessionId)
     )
 
     val uiState = viewModel.sessionsDetailUiState
@@ -38,6 +42,7 @@ fun SessionsDetailScreen(carId: Int) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(paddingValues)
                     .padding(16.dp)
             ) {
                 Text(

@@ -1,6 +1,10 @@
 [versions]
 activityComposeVersion = "1.10.1"
 agp = "8.8.0"
+fontawesomeTypeface = "5.9.0.0"
+fontawesomeTypefaceVersion = "5.13.3.1-kotlin"
+iconicsCore = "5.3.5"
+iconicsCoreVersion = "5.3.4"
 kotlin = "2.0.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -20,6 +24,11 @@ retrofit2KotlinxSerializationConverter = "1.0.0"
 androidx-activity-compose-v1101 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+fontawesome-typeface = { module = "com.mikepenz:fontawesome-typeface", version.ref = "fontawesomeTypeface" }
+fontawesome-typeface-v51331kotlin = { module = "com.mikepenz:fontawesome-typeface", version.ref = "fontawesomeTypefaceVersion" }
+iconics-compose = { module = "com.mikepenz:iconics-compose", version.ref = "iconicsCoreVersion" }
+iconics-core = { module = "com.mikepenz:iconics-core", version.ref = "iconicsCore" }
+iconics-core-v534 = { module = "com.mikepenz:iconics-core", version.ref = "iconicsCoreVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

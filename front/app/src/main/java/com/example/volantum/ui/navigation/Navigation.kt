@@ -36,14 +36,14 @@ fun App() {
             composable(NavigationRouter.CarsDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
                 if (id != null) {
-                    CarsDetailScreen(id)
+                    CarsDetailScreen(id, paddingValues = paddingValues)
                 } else {
                 }
             }
             composable(NavigationRouter.SessionsDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
                 if (id != null) {
-                    SessionsDetailScreen(id)
+                    SessionsDetailScreen(id, paddingValues = paddingValues)
                 } else {
                 }
             }

@@ -13,10 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.volantum.ui.navigation.App
 import com.example.volantum.ui.theme.VolantumTheme
+import com.mikepenz.iconics.Iconics
+import com.mikepenz.iconics.typeface.library.fontawesome.FontAwesome
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Iconics.registerFont(FontAwesome)
         enableEdgeToEdge()
         setContent {
             VolantumTheme {
