@@ -1,6 +1,7 @@
 package com.example.volantum.ui.screens.cars
 
 import com.example.volantum.R
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,6 +29,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.draw.clip
@@ -35,17 +37,34 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.mikepenz.iconics.compose.Image
 import com.mikepenz.iconics.typeface.library.fontawesome.FontAwesome
+import androidx.navigation.NavController
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import com.example.volantum.ui.navigation.NavigationRouter
+import kotlinx.coroutines.launch
 
 @Composable
 fun CarsDetailScreen(
     carId: Int,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    navController: NavController
 ) {
     val viewModel: CarsDetailViewModel = viewModel(
         factory = CarsDetailViewModelFactory(carId)
     )
 
+    // Observar si hubo una actualización
+    LaunchedEffect(Unit) {
+        navController.currentBackStackEntry?.savedStateHandle?.get<Boolean>("carUpdated")?.let {
+            if (it) {
+                viewModel.refreshCarDetails()
+                navController.currentBackStackEntry?.savedStateHandle?.remove<Boolean>("carUpdated")
+            }
+        }
+    }
+
     val uiState = viewModel.carsDetailUiState
+    val scope = rememberCoroutineScope()
 
     when (uiState) {
         is CarsDetailUiState.Loading -> {
@@ -119,20 +138,49 @@ fun CarsDetailScreen(
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
-
+                    
                     Button(
-                        onClick = { /* Iniciar sesión de conducción */ },
+                        onClick = { 
+                            navController.currentBackStackEntry?.savedStateHandle?.set("car", uiState.car)
+                            navController.navigate("cars/${car.id}/edit") 
+                        },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
+                            containerColor = MaterialTheme.colorScheme.secondary
                         )
                     ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Add,
-                            contentDescription = null
+                        Image(
+                            asset = FontAwesome.Icon.faw_edit,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surface)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Iniciar sesión de conducción")
+                        Text("Editar coche")
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            viewModel.deleteCar(carId) { success ->
+                                if (success) {
+                                    navController.previousBackStackEntry?.savedStateHandle?.set("refresh", true)
+                                    navController.navigate(NavigationRouter.Cars.route)
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary
+                        )
+                    ) {
+                        Image(
+                            asset = FontAwesome.Icon.faw_trash,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surface)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Eliminar coche")
                     }
                 }
             }
@@ -164,7 +212,7 @@ private fun InfoCard(
                 asset = icon,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
-                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(

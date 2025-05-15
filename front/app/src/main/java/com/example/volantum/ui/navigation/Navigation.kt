@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.volantum.ui.components.AppTopBar
 import com.example.volantum.ui.components.BottomNavigationBar
 import com.example.volantum.ui.screens.cars.CarsDetailScreen
+import com.example.volantum.ui.screens.cars.CarsEditScreen
 import com.example.volantum.ui.screens.cars.CarsScreen
 import com.example.volantum.ui.screens.home.HomeScreen
 import com.example.volantum.ui.screens.sessions.SessionsDetailScreen
@@ -36,8 +37,7 @@ fun App() {
             composable(NavigationRouter.CarsDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
                 if (id != null) {
-                    CarsDetailScreen(id, paddingValues = paddingValues)
-                } else {
+                    CarsDetailScreen(id, paddingValues = paddingValues, navController)
                 }
             }
             composable(NavigationRouter.SessionsDetail.route) { backStackEntry ->
@@ -45,6 +45,12 @@ fun App() {
                 if (id != null) {
                     SessionsDetailScreen(id, paddingValues = paddingValues)
                 } else {
+                }
+            }
+            composable(NavigationRouter.CarsEdit.route) { backStackEntry ->
+                val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
+                if (id != null) {
+                    CarsEditScreen(id, paddingValues = paddingValues, navController)
                 }
             }
         }

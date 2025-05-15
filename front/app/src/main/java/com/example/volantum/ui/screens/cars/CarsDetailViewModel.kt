@@ -37,6 +37,21 @@ class CarsDetailViewModel(
             }
         }
     }
+
+    fun refreshCarDetails() {
+        getCarsDetail(carId)
+    }
+
+    fun deleteCar(carId: Int, onSuccess: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = CarApi.retrofitService.deleteCar(carId)
+                onSuccess(response.isSuccessful)
+            } catch (e: Exception) {
+                onSuccess(false)
+            }
+        }
+    }
 }
 
 class CarsDetailViewModelFactory(

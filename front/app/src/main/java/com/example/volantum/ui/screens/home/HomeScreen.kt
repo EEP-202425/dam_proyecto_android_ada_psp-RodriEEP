@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -160,9 +161,19 @@ fun HomeScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
-
-                items(user.cars ?: emptyList()) { car ->
-                    CarCard(car = car, navController = navController)
+                if (user.cars?.isEmpty() == true) {
+                    item {
+                        Text(
+                            "No tienes coches disponibles.",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+                } else {
+                    items(user.cars ?: emptyList()) { car ->
+                        CarCard(car = car, navController = navController)
+                    }
                 }
             }
         }

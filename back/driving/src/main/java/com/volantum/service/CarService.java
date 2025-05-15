@@ -63,4 +63,16 @@ public class CarService implements CarServiceInterface {
 		return dtoConverterService.convertCarToDTO(car);
 	}
 
+	public Car update(int id, CarRequestDTO car) {
+		Car carToUpdate = carRepository.findById(id).orElseThrow(() -> new RuntimeException("Car not found"));
+		carToUpdate.setPlate(car.getPlate());
+		carToUpdate.setBrand(car.getBrand());
+		carToUpdate.setModel(car.getModel());
+		carToUpdate.setYearModel(car.getYearModel());
+		return carRepository.save(carToUpdate);
+	}
+
+	public void delete(int id) {
+		carRepository.deleteById(id);
+	}
 }

@@ -32,5 +32,9 @@ class CarsViewModel: ViewModel() {
                 CarsUiState.Error(e.message.toString())
             }
         }
-    }   
+    }
+
+    fun refreshCarsList() {
+        getCars()
+    }
 }

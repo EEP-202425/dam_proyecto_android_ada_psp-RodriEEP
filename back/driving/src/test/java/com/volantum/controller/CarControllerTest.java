@@ -17,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.volantum.domain.Car;
 import com.volantum.domain.User;
 import com.volantum.driving.VolantumApplication;
+import com.volantum.dto.CarRequestDTO;
 import com.volantum.dto.CarResponseDTO;
 import com.volantum.service.CarService;
 import com.volantum.service.UserService;
@@ -94,6 +95,35 @@ class CarControllerTest {
 	void testAddCarToUserWithInvalidUser() {
 		ResponseEntity<CarResponseDTO> response = restTemplate.postForEntity("/api/cars/user/999", testCar, CarResponseDTO.class);
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+	}
+
+	@Test
+	void testUpdateCar() {
+		ResponseEntity<CarResponseDTO> response = restTemplate.postForEntity("/api/cars/user/" + testUser.getId(), testCar, CarResponseDTO.class);
+		CarResponseDTO carSaved = response.getBody();
+		CarRequestDTO carTest2 = new CarRequestDTO("ORM343", "Ferrari", "F8", 2020, null, 0.0);
+		restTemplate.put("/api/cars/" + carSaved.getId(), carTest2, CarResponseDTO.class);
+		
+		ResponseEntity<CarResponseDTO> updatedCar = restTemplate.getForEntity("/api/cars/" + carSaved.getId(), CarResponseDTO.class);
+		assertEquals(HttpStatus.OK, updatedCar.getStatusCode());
+
+		CarResponseDTO carUpdated = updatedCar.getBody();
+		
+		assertNotNull(carUpdated);
+		assertEquals(carTest2.getPlate(), carUpdated.getPlate());
+		assertEquals(carTest2.getBrand(), carUpdated.getBrand());
+		assertEquals(carTest2.getModel(), carUpdated.getModel());
+		assertEquals(carTest2.getYearModel(), carUpdated.getYearModel());
+	}
+
+	@Test
+	void testDeleteCar() {
+		ResponseEntity<CarResponseDTO> response = restTemplate.postForEntity("/api/cars/user/" + testUser.getId(), testCar, CarResponseDTO.class);
+		CarResponseDTO carSaved = response.getBody();
+		restTemplate.delete("/api/cars/" + carSaved.getId());
+
+		ResponseEntity<CarResponseDTO> responseById = restTemplate.getForEntity("/api/cars/" + carSaved.getId(), CarResponseDTO.class);
+		assertEquals(HttpStatus.NOT_FOUND, responseById.getStatusCode());
 	}
 
 }

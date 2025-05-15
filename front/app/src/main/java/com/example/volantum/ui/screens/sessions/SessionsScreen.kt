@@ -14,6 +14,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.volantum.ui.components.SessionCard
@@ -33,15 +34,27 @@ fun SessionsScreen(
         }
         is SessionsUiState.Success -> {
             val drivingSessions = (viewModel.sessionsUiState as SessionsUiState.Success).cars
-            LazyColumn(
-                modifier = Modifier
+            
+            if (drivingSessions.isEmpty()) {
+                Text(
+                    text = "No hay sesiones de conducción disponibles",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(paddingValues)
+                        .padding(16.dp),
+                    textAlign = TextAlign.Center
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
                     .padding(16.dp)
-            ) {
-                items(drivingSessions) { session ->
-                    SessionCard(session = session, navController = navController)
-                    Spacer(modifier = Modifier.height(20.dp))
+                ) {
+                    items(drivingSessions) { session ->
+                        SessionCard(session = session, navController = navController)
+                            Spacer(modifier = Modifier.height(20.dp))
+                    }
                 }
             }
         }

@@ -13,9 +13,12 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.volantum.ui.components.CarCard
 
 @Composable
@@ -24,7 +27,19 @@ fun CarsScreen(
     paddingValues: PaddingValues,
     viewModel: CarsViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    when (viewModel.carsUiState) {
+
+    LaunchedEffect(Unit) {
+        navController.currentBackStackEntry?.savedStateHandle?.get<Boolean>("refresh")?.let {
+            if (it) {
+                viewModel.refreshCarsList()
+                navController.currentBackStackEntry?.savedStateHandle?.remove<Boolean>("refresh")
+            }
+        }
+    }
+
+    val uiSate = viewModel.carsUiState
+
+    when (uiSate) {
         is CarsUiState.Loading -> {
             androidx.compose.material3.CircularProgressIndicator()
         }
@@ -33,15 +48,26 @@ fun CarsScreen(
         }
         is CarsUiState.Success -> {
             val cars = (viewModel.carsUiState as CarsUiState.Success).cars
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(16.dp)
-            ) {
-                items(cars) { car ->
-                    CarCard(car = car, navController = navController)
-                    Spacer(modifier = Modifier.height(20.dp))
+             if (cars.isEmpty()) {
+                Text(
+                    text = "No hay coches disponibles.",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(paddingValues)
+                        .padding(16.dp),
+                    textAlign = TextAlign.Center
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(16.dp)
+                ) {
+                    items(cars) { car ->
+                        CarCard(car = car, navController = navController)
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
                 }
             }
         }

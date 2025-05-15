@@ -1,6 +1,7 @@
 package com.volantum.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
@@ -75,4 +76,23 @@ class CarServiceTest {
 		assertEquals(2, cars.size());
 	}
 
+	@Test
+	void updateCarTest() {
+		Car savedCar = carService.addCarToUser(carTest, testUser);
+
+		CarRequestDTO carTest2 = new CarRequestDTO("ORM343", "Ferrari", "F8", 2020, null, 0.0);
+
+		Car updatedCar = carService.update(savedCar.getId(), carTest2);
+
+		assertEquals(carTest2.getBrand(), updatedCar.getBrand());
+		assertEquals(carTest2.getModel(), updatedCar.getModel());
+		assertEquals(carTest2.getYearModel(), updatedCar.getYearModel());
+	}
+
+	@Test
+	void deleteCarTest() {
+		Car savedCar = carService.addCarToUser(carTest, testUser);
+		carService.delete(savedCar.getId());
+		assertFalse(carService.findById(savedCar.getId()).isPresent());
+	}
 }
