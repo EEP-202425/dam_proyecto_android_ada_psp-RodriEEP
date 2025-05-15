@@ -10,8 +10,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.volantum.enums.AlertPriority;
 import com.volantum.enums.AlertStatus;

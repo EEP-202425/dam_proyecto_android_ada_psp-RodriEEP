@@ -28,7 +28,8 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = LightColor,
     onTertiary = LightColor,
     onBackground = DarkColor,
-    onSurface = LightDarkColor
+    onSurface = LightDarkColor,
+    surfaceTint = LightColor
 )
 
 @Composable

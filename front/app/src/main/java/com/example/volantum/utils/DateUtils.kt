@@ -20,3 +20,8 @@ fun formatDateTime(dateTime: LocalDateTime): String {
         else -> dateTime.format(fullDateFormatter)
     }
 }
+
+fun formatDateTimeSimple(dateTime: LocalDateTime): String {
+    val formatter = DateTimeFormatter.ofPattern("hh:mm a - dd/MM/yyyy", Locale.getDefault())
+    return dateTime.format(formatter)
+}

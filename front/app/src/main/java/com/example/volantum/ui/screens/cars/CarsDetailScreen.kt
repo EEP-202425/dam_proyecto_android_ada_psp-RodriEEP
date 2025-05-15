@@ -56,6 +56,14 @@ fun CarsDetailScreen(
                 CircularProgressIndicator()
             }
         }
+        is CarsDetailUiState.Error -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Error al cargar los datos del coche")
+            }
+        }
         is CarsDetailUiState.Success -> {
             val car = uiState.car
             Column(
@@ -129,8 +137,6 @@ fun CarsDetailScreen(
                 }
             }
         }
-
-        is CarsDetailUiState.Error -> TODO()
     }
 }
 

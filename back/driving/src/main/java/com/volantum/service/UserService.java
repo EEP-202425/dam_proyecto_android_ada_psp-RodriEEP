@@ -1,15 +1,11 @@
 package com.volantum.service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.volantum.domain.Car;
-import com.volantum.domain.DrivingSession;
 import com.volantum.domain.User;
 import com.volantum.dto.UserResponseDTO;
 import com.volantum.repository.UserRepository;

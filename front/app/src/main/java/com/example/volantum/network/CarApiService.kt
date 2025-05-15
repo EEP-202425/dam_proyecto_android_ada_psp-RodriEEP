@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-private const val BASE_URL = "http://192.168.1.121:8080"
+private const val BASE_URL = "http://10.0.2.2:8080"
 
 // Configuración del serializador Json
 private val json = Json { 
