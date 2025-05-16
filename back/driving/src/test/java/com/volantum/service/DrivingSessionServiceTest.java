@@ -94,6 +94,21 @@ public class DrivingSessionServiceTest {
     }
 
     @Test
+    void shouldSaveSessionWithCorrectDescriptionDependingOnHour() {
+        String description = switch(LocalDateTime.now().getHour()) {
+			case 0, 1, 2, 3, 4, 5, 6 -> "Sesión de madrugada";
+			case 7, 8, 9, 10, 11, 12 -> "Sesión en la mañana";
+			case 13, 14, 15, 16, 17, 18 -> "Sesión en la tarde";
+			default -> "Sesión nocturna";
+		};
+        
+        DrivingSession savedSession = saveSession(carTest);
+
+        assertThat(savedSession.getDescription()).isEqualTo(description);
+    }
+    
+
+    @Test
     void shouldFindAllSessionsByUserId() {
         saveSession(carTest);
         saveSession(carTest);

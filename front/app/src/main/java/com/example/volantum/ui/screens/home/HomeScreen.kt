@@ -52,7 +52,7 @@ fun HomeScreen(
         }
         is HomeUiState.Success -> {
            val user = uiState.user
-            val lastSession = user.drivingSessions?.lastOrNull()
+            val lastSession = user.drivingSessions?.firstOrNull()
             val sweepAngle = (user.score.toFloat() / 5f) * 360f
             val arcColor = when {
                 user.score >= 4 -> MaterialTheme.colorScheme.secondary
