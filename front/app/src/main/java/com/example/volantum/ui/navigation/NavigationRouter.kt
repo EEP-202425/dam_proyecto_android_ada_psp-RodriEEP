@@ -5,6 +5,7 @@ sealed class NavigationRouter(val route: String, val title: String) {
     object Sessions : NavigationRouter("sessions", "Tus sesiones")
     object Cars : NavigationRouter("cars", "Tus coches")
     object CarsDetail: NavigationRouter("cars/{id}", "Detalle de coche")
-    object SessionsDetail: NavigationRouter("sessions/{id}", "Detalle de sesión")
+    object CarsCreate: NavigationRouter("cars/create", "Crear coche")
     object CarsEdit : NavigationRouter("cars/{id}/edit", "Editar coche")
+    object SessionsDetail: NavigationRouter("sessions/{id}", "Detalle de sesión")
 }

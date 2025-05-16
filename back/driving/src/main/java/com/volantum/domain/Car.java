@@ -29,8 +29,8 @@ public class Car extends AuditableEntity {
 	private String brand;
 	private String model;
 	private int yearModel;
-	private String image;
-	private Double mileage;
+	private String image = "";
+	private Double mileage = 0.0;
 
 	// RELATIONS
 

@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.volantum.ui.components.AppTopBar
 import com.example.volantum.ui.components.BottomNavigationBar
+import com.example.volantum.ui.screens.cars.CarsCreateScreen
 import com.example.volantum.ui.screens.cars.CarsDetailScreen
 import com.example.volantum.ui.screens.cars.CarsEditScreen
 import com.example.volantum.ui.screens.cars.CarsScreen
@@ -36,6 +37,7 @@ fun App() {
                 route == NavigationRouter.Sessions.route -> NavigationRouter.Sessions.title
                 route == NavigationRouter.Cars.route -> NavigationRouter.Cars.title
                 route?.startsWith("cars/") == true && route.endsWith("/edit") -> NavigationRouter.CarsEdit.title
+                route?.startsWith("cars/") == true && route.endsWith("/create") -> NavigationRouter.CarsCreate.title
                 route?.startsWith("cars/") == true -> NavigationRouter.CarsDetail.title
                 route?.startsWith("sessions/") == true -> NavigationRouter.SessionsDetail.title
                 else -> "Volantum"
@@ -67,17 +69,18 @@ fun App() {
                     CarsDetailScreen(id, paddingValues = paddingValues, navController)
                 }
             }
+            composable(NavigationRouter.CarsCreate.route) { CarsCreateScreen(paddingValues = paddingValues, navController) }
+            composable(NavigationRouter.CarsEdit.route) { backStackEntry ->
+                val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
+                if (id != null) {
+                    CarsEditScreen(id, paddingValues = paddingValues, navController)
+                }
+            }
             composable(NavigationRouter.SessionsDetail.route) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
                 if (id != null) {
                     SessionsDetailScreen(id, paddingValues = paddingValues)
                 } else {
-                }
-            }
-            composable(NavigationRouter.CarsEdit.route) { backStackEntry ->
-                val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
-                if (id != null) {
-                    CarsEditScreen(id, paddingValues = paddingValues, navController)
                 }
             }
         }

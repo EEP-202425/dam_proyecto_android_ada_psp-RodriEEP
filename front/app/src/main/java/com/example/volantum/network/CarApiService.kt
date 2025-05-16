@@ -9,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -31,6 +32,9 @@ interface CarApiService {
 
     @GET("api/cars/{id}")
     suspend fun getCarsDetail(@Path(value = "id") id: Int ): Car
+
+    @POST("api/cars/user/4")
+    suspend fun createCar(@Body car: Car): Car
 
     @PUT("api/cars/{id}")
     suspend fun updateCar(@Path(value = "id") id: Int, @Body car: Car): Car

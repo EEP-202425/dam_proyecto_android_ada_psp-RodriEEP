@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.volantum.ui.components.SessionCard
 import com.example.volantum.ui.components.CarCard
+import com.example.volantum.ui.navigation.NavigationRouter
 
 @Composable
 fun HomeScreen(
@@ -173,6 +176,27 @@ fun HomeScreen(
                 } else {
                     items(user.cars ?: emptyList()) { car ->
                         CarCard(car = car, navController = navController)
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+                }
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                navController.navigate(NavigationRouter.CarsCreate.route)
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary
+                            ),
+                            elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                        ) {
+                            Text("Crear coche")
+                        }
                     }
                 }
             }
