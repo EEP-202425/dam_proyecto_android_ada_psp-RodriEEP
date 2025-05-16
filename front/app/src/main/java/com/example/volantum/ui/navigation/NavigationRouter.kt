@@ -1,15 +1,10 @@
 package com.example.volantum.ui.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Home
-
-sealed class NavigationRouter(val route: String) {
-    object Home : NavigationRouter("home")
-    object Sessions : NavigationRouter("sessions")
-    object Cars : NavigationRouter("cars")
-    object CarsDetail: NavigationRouter("cars/{id}")
-    object SessionsDetail: NavigationRouter("sessions/{id}")
-    object CarsEdit : NavigationRouter("cars/{id}/edit")
+sealed class NavigationRouter(val route: String, val title: String) {
+    object Home : NavigationRouter("home", "Volantum")
+    object Sessions : NavigationRouter("sessions", "Tus sesiones")
+    object Cars : NavigationRouter("cars", "Tus coches")
+    object CarsDetail: NavigationRouter("cars/{id}", "Detalle de coche")
+    object SessionsDetail: NavigationRouter("sessions/{id}", "Detalle de sesión")
+    object CarsEdit : NavigationRouter("cars/{id}/edit", "Editar coche")
 }

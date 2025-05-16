@@ -4,6 +4,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,9 +25,31 @@ import com.example.volantum.ui.screens.sessions.SessionsScreen
 @Composable
 fun App() {
     val navController = rememberNavController()
+    var currentTitle by remember { mutableStateOf(NavigationRouter.Home.title) }
+
+    // Track current route for title updates
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow.collect { backStackEntry ->
+            val route = backStackEntry.destination.route
+            currentTitle = when {
+                route == NavigationRouter.Home.route -> NavigationRouter.Home.title
+                route == NavigationRouter.Sessions.route -> NavigationRouter.Sessions.title
+                route == NavigationRouter.Cars.route -> NavigationRouter.Cars.title
+                route?.startsWith("cars/") == true && route.endsWith("/edit") -> NavigationRouter.CarsEdit.title
+                route?.startsWith("cars/") == true -> NavigationRouter.CarsDetail.title
+                route?.startsWith("sessions/") == true -> NavigationRouter.SessionsDetail.title
+                else -> "Volantum"
+            }
+        }
+    }
 
     Scaffold(
-        topBar = { AppTopBar(title = "Volantum") },
+        topBar = {
+            AppTopBar(
+                currentScreen = currentTitle,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() }
+            )},
         bottomBar = { BottomNavigationBar(navController) },
         containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
