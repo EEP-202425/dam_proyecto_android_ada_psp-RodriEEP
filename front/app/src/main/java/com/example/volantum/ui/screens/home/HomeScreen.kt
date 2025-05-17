@@ -1,7 +1,7 @@
 package com.example.volantum.ui.screens.home
 
+import com.example.volantum.R
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -26,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,7 +48,7 @@ fun HomeScreen(
             androidx.compose.material3.CircularProgressIndicator()
         }
         is HomeUiState.Error -> {
-            Text(uiState.message ?: "Error al cargar perfil")
+            Text(stringResource(id = R.string.home_error_profile))
         }
         is HomeUiState.Success -> {
             val user = uiState.user
@@ -61,8 +61,8 @@ fun HomeScreen(
             }
             val arcBackgroundColor = arcColor.copy(alpha = 0.2f)
             val motivationalMessage = when {
-                user.score >= 4 -> "¡Excelente! Manejas con mucha responsabilidad."
-                else -> "¡Aún puedes mejorar! Sigue así."
+                user.score >= 4 -> R.string.home_excellent_driver
+                else -> R.string.home_need_improvement
             }
 
             LazyColumn(
@@ -73,14 +73,14 @@ fun HomeScreen(
             ) {
                 item {
                     Text(
-                        text = "Hola, ${user.firstName}!",
+                        stringResource(id = R.string.home_greeting, user.firstName),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = MaterialTheme.typography.titleLarge
                     )
                     Spacer(modifier = Modifier.height(32.dp))
 
                     Text(
-                        "Tu última sesión",
+                        stringResource(id = R.string.home_last_session),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -89,13 +89,13 @@ fun HomeScreen(
                     if (lastSession != null) {
                         SessionCard(session = lastSession, navController = navController)
                     } else {
-                        Text("No tienes sesiones anteriores.")
+                        Text(stringResource(id = R.string.home_no_sessions))
                     }
 
                     Spacer(modifier = Modifier.height(32.dp))
 
                     Text(
-                        "Tu puntuación",
+                        stringResource(id = R.string.home_your_score),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -146,12 +146,16 @@ fun HomeScreen(
 
                             Column {
                                 Text(
-                                    motivationalMessage,
+                                    stringResource(id = motivationalMessage),
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onBackground
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
-                                Text("Sesiones esta semana: ${user.drivingSessions?.size ?: 0}")
+                                Text(
+                                    stringResource(id = R.string.home_sessions_this_week, user.drivingSessions?.size ?: 0),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
                             }
                         }
                     }
@@ -159,7 +163,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(32.dp))
 
                     Text(
-                        "Tu coche preferido",
+                        stringResource(id = R.string.home_favourite_car),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -168,7 +172,7 @@ fun HomeScreen(
                 if (user.cars?.isEmpty() == true) {
                     item {
                         Text(
-                            "No tienes coches disponibles.",
+                            stringResource(id = R.string.home_no_cars),
                             color = MaterialTheme.colorScheme.onBackground,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.fillMaxWidth(),
@@ -198,7 +202,7 @@ fun HomeScreen(
                             ),
                             elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
                         ) {
-                            Text("Agregar coche")
+                            Text(stringResource(id = R.string.home_add_car))
                         }
                         Button(
                             onClick = {
@@ -209,7 +213,7 @@ fun HomeScreen(
                                 contentColor = MaterialTheme.colorScheme.onSurface,
                             )
                         ) {
-                            Text("Ver todos")
+                            Text(stringResource(id = R.string.home_view_all))
                         }
                     }
                 }

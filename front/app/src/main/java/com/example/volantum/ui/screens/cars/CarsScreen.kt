@@ -29,9 +29,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.volantum.R
 import com.example.volantum.ui.components.CarCard
 import com.example.volantum.ui.navigation.NavigationRouter
 import com.mikepenz.iconics.compose.Image
@@ -60,13 +62,15 @@ fun CarsScreen(
             androidx.compose.material3.CircularProgressIndicator()
         }
         is CarsUiState.Error -> {
-            Text((viewModel.carsUiState as CarsUiState.Error).message ?: "Error al cargar los coches")
+            Text(
+                (uiState as CarsUiState.Error).message ?: stringResource(R.string.cars_list_error_load)
+            )
         }
         is CarsUiState.Success -> {
             val cars = (viewModel.carsUiState as CarsUiState.Success).cars
              if (cars.isEmpty()) {
                 Text(
-                    text = "No hay coches disponibles.",
+                    stringResource(R.string.cars_list_no_cars),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValues)
@@ -88,7 +92,7 @@ fun CarsScreen(
                          ),
                          elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
                      ) {
-                         Text("Crear coche")
+                         Text(stringResource(R.string.create_car))
                      }
                  }
             } else {

@@ -35,6 +35,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.mikepenz.iconics.compose.Image
 import com.mikepenz.iconics.typeface.library.fontawesome.FontAwesome
 import androidx.navigation.NavController
@@ -80,7 +81,7 @@ fun CarsDetailScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Error al cargar los datos del coche")
+                Text(stringResource(R.string.cars_detail_error_load))
             }
         }
         is CarsDetailUiState.Success -> {
@@ -92,7 +93,11 @@ fun CarsDetailScreen(
             ) {
                 Image(
                     painterResource(id = R.drawable.car_placeholder),
-                    contentDescription = "${car.brand} ${car.model}",
+                    contentDescription = stringResource(
+                        R.string.cars_detail_image_content_desc,
+                        car.brand,
+                        car.model
+                    ),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -125,13 +130,13 @@ fun CarsDetailScreen(
                     ) {
                         InfoCard(
                             modifier = Modifier.weight(1f),
-                            title = "Año",
+                            title = stringResource(R.string.car_year),
                             value = "${car.yearModel}",
                             icon = FontAwesome.Icon.faw_calendar
                         )
                         InfoCard(
                             modifier = Modifier.weight(1f),
-                            title = "Kilómetros",
+                            title = stringResource(R.string.car_kilometers),
                             value = "${car.mileage}",
                             icon = FontAwesome.Icon.faw_car
                         )
@@ -155,7 +160,7 @@ fun CarsDetailScreen(
                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surface)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Editar coche")
+                        Text(stringResource(R.string.cars_detail_edit_car))
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -180,7 +185,7 @@ fun CarsDetailScreen(
                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surface)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Eliminar coche")
+                        Text(stringResource(R.string.cars_detail_delete_car))
                     }
                 }
             }

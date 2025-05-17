@@ -23,9 +23,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.volantum.R
 import com.example.volantum.data.model.Event
 import com.example.volantum.utils.formatDateTimeSimple
 import java.time.LocalDateTime
@@ -60,7 +62,7 @@ fun SessionsDetailScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Detalle de sesión",
+                    text = stringResource(R.string.sessions_detail_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -74,12 +76,12 @@ fun SessionsDetailScreen(
                     // First Row
                     StatCard(
                         modifier = Modifier.weight(1f),
-                        label = "Duración",
+                        label = stringResource(R.string.sessions_detail_duration),
                         value = session.duration ?: "---",
                     )
                     StatCard(
                         modifier = Modifier.weight(1f),
-                        label = "Distancia",
+                        label = stringResource(R.string.sessions_detail_distance),
                         value = "${session.distance?.toString() ?: "---"} km",
                     )
                 }
@@ -93,12 +95,12 @@ fun SessionsDetailScreen(
                     // Second Row
                     StatCard(
                         modifier = Modifier.weight(1f),
-                        label = "Velocidad media",
+                        label = stringResource(R.string.sessions_detail_avg_speed),
                         value = "${session.averageSpeed?.toString() ?: "---"} km/h",
                     )
                     StatCard(
                         modifier = Modifier.weight(1f),
-                        label = "Puntuación",
+                        label = stringResource(R.string.sessions_detail_score),
                         value = "${session.score?.toString() ?: "---"}/5 ⭐",
                     )
                 }
@@ -108,7 +110,7 @@ fun SessionsDetailScreen(
                 // Events section
                 if (session.events.isNotEmpty()) {
                     Text(
-                        text = "${session.events.size} eventos destacados",
+                        text = stringResource(R.string.sessions_detail_highlighted_events, session.events.size),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -131,7 +133,7 @@ fun SessionsDetailScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "¡Oops! ${uiState.message}",
+                    text = stringResource(R.string.sessions_detail_error_prefix, uiState.message),
                     color = MaterialTheme.colorScheme.error
                 )
             }

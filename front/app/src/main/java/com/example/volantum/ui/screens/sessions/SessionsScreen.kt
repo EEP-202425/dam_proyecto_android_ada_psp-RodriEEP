@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.volantum.R
+import androidx.compose.ui.res.stringResource
 import com.example.volantum.ui.components.SessionCard
 
 @Composable
@@ -30,14 +32,16 @@ fun SessionsScreen(
             androidx.compose.material3.CircularProgressIndicator()
         }
         is SessionsUiState.Error -> {
-            Text((viewModel.sessionsUiState as SessionsUiState.Error).message ?: "Error al cargar los coches")
+            Text(
+                (viewModel.sessionsUiState as SessionsUiState.Error).message ?: stringResource(R.string.sessions_error_load)
+            )
         }
         is SessionsUiState.Success -> {
             val drivingSessions = (viewModel.sessionsUiState as SessionsUiState.Success).cars
             
             if (drivingSessions.isEmpty()) {
                 Text(
-                    text = "No hay sesiones de conducción disponibles",
+                    stringResource(R.string.sessions_no_sessions),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValues)

@@ -1,3 +1,55 @@
 <resources>
     <string name="app_name">Volantum</string>
+
+    <!-- HomeScreen -->
+    <string name="home_greeting">¡Hola, %1$s!</string>
+    <string name="home_last_session">Tu última sesión</string>
+    <string name="home_no_sessions">No tienes sesiones anteriores.</string>
+    <string name="home_your_score">Tu puntuación</string>
+    <string name="home_excellent_driver">¡Excelente! Manejas con mucha responsabilidad.</string>
+    <string name="home_need_improvement">¡Aún puedes mejorar! Sigue así.</string>
+    <string name="home_sessions_this_week">Sesiones esta semana: %1$d</string>
+    <string name="home_favourite_car">Tu coche preferido</string>
+    <string name="home_no_cars">No tienes coches disponibles.</string>
+    <string name="home_add_car">Agregar coche</string>
+    <string name="home_view_all">Ver todos</string>
+    <string name="home_error_profile">Error al cargar perfil</string>
+
+    <!-- Common -->
+    <string name="car_brand">Marca</string>
+    <string name="car_model">Modelo</string>
+    <string name="car_plate">Matrícula</string>
+    <string name="car_year">Año</string>
+    <string name="car_kilometers">Kilómetros</string>
+    <string name="create_car">Crear coche</string>
+
+    <!-- Cars-Edit -->
+    <string name="cars_edit_error_load">Error al cargar los datos del coche</string>
+    <string name="cars_edit_save_changes">Guardar cambios</string>
+
+    <!-- Cars-Create -->
+    <string name="cars_create_error_create">Error al crear el coche</string>
+
+    <!-- Cars-Detail -->
+    <string name="cars_detail_error_load">Error al cargar los datos del coche</string>
+    <string name="cars_detail_edit_car">Editar coche</string>
+    <string name="cars_detail_delete_car">Eliminar coche</string>
+    <string name="cars_detail_image_content_desc">%1$s %2$s</string>
+
+    <!-- Cars-List -->
+    <string name="cars_list_no_cars">No hay coches disponibles.</string>
+    <string name="cars_list_error_load">Error al cargar los coches</string>
+
+    <!-- Sessions-List -->
+    <string name="sessions_error_load">Error al cargar las sesiones</string>
+    <string name="sessions_no_sessions">No hay sesiones de conducción disponibles</string>
+
+    <!-- Sessions-Detail -->
+    <string name="sessions_detail_title">Detalle de sesión</string>
+    <string name="sessions_detail_duration">Duración</string>
+    <string name="sessions_detail_distance">Distancia</string>
+    <string name="sessions_detail_avg_speed">Velocidad media</string>
+    <string name="sessions_detail_score">Puntuación</string>
+    <string name="sessions_detail_highlighted_events">%1$d eventos destacados</string>
+    <string name="sessions_detail_error_prefix">¡Oops! %1$s</string>
 </resources>

@@ -10,6 +10,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.volantum.data.model.Car
 import com.example.volantum.ui.navigation.NavigationRouter
+import com.example.volantum.R
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun CarsCreateScreen(
@@ -35,28 +37,28 @@ fun CarsCreateScreen(
         OutlinedTextField(
             value = brand,
             onValueChange = { brand = it },
-            label = { Text("Marca") },
+            label = { Text(stringResource(R.string.car_brand)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value = model,
             onValueChange = { model = it },
-            label = { Text("Modelo") },
+            label = { Text(stringResource(R.string.car_model)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value = plate,
             onValueChange = { plate = it },
-            label = { Text("Matrícula") },
+            label = { Text(stringResource(R.string.car_plate)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value = yearModel,
             onValueChange = { yearModel = it },
-            label = { Text("Año") },
+            label = { Text(stringResource(R.string.car_year)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -70,7 +72,7 @@ fun CarsCreateScreen(
             }
             CarsCreateUiState.Error -> {
                 Text(
-                    "Error al crear el coche",
+                    stringResource(R.string.cars_create_error_create),
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -99,7 +101,7 @@ fun CarsCreateScreen(
                         containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
-                    Text("Crear coche")
+                    Text(stringResource(R.string.create_car))
                 }
             }
         }

@@ -9,6 +9,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.volantum.data.model.Car
+import com.example.volantum.R
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun CarsEditScreen(
@@ -39,7 +41,7 @@ fun CarsEditScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Error al cargar los datos del coche")
+                Text(stringResource(R.string.cars_edit_error_load))
             }
         }
         is CarsEditUiState.Success -> {
@@ -58,28 +60,28 @@ fun CarsEditScreen(
                 OutlinedTextField(
                     value = brand,
                     onValueChange = { brand = it },
-                    label = { Text("Marca") },
+                    label = { Text(stringResource(R.string.car_brand)) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 OutlinedTextField(
                     value = model,
                     onValueChange = { model = it },
-                    label = { Text("Modelo") },
+                    label = { Text(stringResource(R.string.car_model)) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 OutlinedTextField(
                     value = plate,
                     onValueChange = { plate = it },
-                    label = { Text("Matrícula") },
+                    label = { Text(stringResource(R.string.car_plate)) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 OutlinedTextField(
                     value = yearModel,
                     onValueChange = { yearModel = it },
-                    label = { Text("Año") },
+                    label = { Text(stringResource(R.string.car_year)) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -108,7 +110,7 @@ fun CarsEditScreen(
                         containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
-                    Text("Guardar cambios")
+                    Text(stringResource(R.string.cars_edit_save_changes))
                 }
             }
         }
