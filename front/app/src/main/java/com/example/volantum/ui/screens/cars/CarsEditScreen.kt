@@ -29,8 +29,11 @@ fun CarsEditScreen(
 
     when (uiState) {
         is CarsEditUiState.Loading -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
+           Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()

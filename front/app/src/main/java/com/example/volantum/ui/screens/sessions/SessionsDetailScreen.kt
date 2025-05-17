@@ -47,7 +47,9 @@ fun SessionsDetailScreen(
         is SessionsDetailUiState.Loading -> {
             Box(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()

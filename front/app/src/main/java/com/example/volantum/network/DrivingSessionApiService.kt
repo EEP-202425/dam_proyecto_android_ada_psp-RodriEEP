@@ -23,7 +23,7 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface DrivingSessionApiService {
-    @GET("api/sessions/user/4")
+    @GET("api/sessions/user/1")
     suspend fun getDrivingSessions(): List<DrivingSession>
 
     @GET("api/sessions/{id}")

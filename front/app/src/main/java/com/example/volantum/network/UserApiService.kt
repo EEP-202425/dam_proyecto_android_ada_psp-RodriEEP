@@ -21,7 +21,7 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface UserApiService {
-    @GET("api/users/4")
+    @GET("api/users/1")
     suspend fun getUser(): User
 }
 

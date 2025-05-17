@@ -29,7 +29,7 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface CarApiService {
-    @GET("api/cars/user/4")
+    @GET("api/cars/user/1")
     suspend fun getCars(
         @Query("page") page: Int,
         @Query("size") size: Int
@@ -38,7 +38,7 @@ interface CarApiService {
     @GET("api/cars/{id}")
     suspend fun getCarsDetail(@Path(value = "id") id: Int ): Car
 
-    @POST("api/cars/user/4")
+    @POST("api/cars/user/1")
     suspend fun createCar(@Body car: Car): Car
 
     @PUT("api/cars/{id}")
