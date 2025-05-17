@@ -9,6 +9,11 @@ import com.volantum.domain.Event;
 
 @Service
 public class ScoreCalculatorService implements ScoreCalculatorServiceInterface {
+    /**
+     * Calculates the score of a driving session
+     * @param events the events of the driving session
+     * @return the score of the driving session
+     */
     @Override
     public float calculateSessionScore(List<Event> events) {
         if (events.isEmpty()) return 5.0f;
@@ -27,6 +32,11 @@ public class ScoreCalculatorService implements ScoreCalculatorServiceInterface {
         return Math.max(1.0f, Math.min(5.0f, score));
     }
 
+    /**
+     * Calculates the score of a user
+     * @param sessions the sessions of the user
+     * @return the score of the user
+     */
     @Override
     public float calculateUserScore(List<DrivingSession> sessions) {
         if (sessions.isEmpty()) return 5.0f;

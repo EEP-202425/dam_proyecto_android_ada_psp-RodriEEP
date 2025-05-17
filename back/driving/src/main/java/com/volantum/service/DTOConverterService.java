@@ -8,7 +8,11 @@ import com.volantum.dto.*;
 
 @Service
 public class DTOConverterService {
-    
+    /**
+     * Converts a user to a DTO
+     * @param user the user to convert
+     * @return the DTO of the user
+     */
     public UserResponseDTO convertUserToDTO(User user) {
         UserResponseDTO dto = new UserResponseDTO(
             user.getId(),
@@ -37,6 +41,11 @@ public class DTOConverterService {
         return dto;
     }
 
+    /**
+     * Converts a user to a basic DTO
+     * @param user the user to convert
+     * @return the DTO of the user
+     */
     public UserBasicResponseDTO convertUserToBasicDTO(User user) {
         return new UserBasicResponseDTO(
             user.getId(),
@@ -47,6 +56,11 @@ public class DTOConverterService {
         );
     }
 
+    /**
+     * Converts a car to a DTO
+     * @param car the car to convert
+     * @return the DTO of the car
+     */
     public CarResponseDTO convertCarToDTO(Car car) {
         return new CarResponseDTO(
             car.getId(),
@@ -59,6 +73,11 @@ public class DTOConverterService {
         );
     }
 
+    /**
+     * Converts a driving session to a DTO
+     * @param session the driving session to convert
+     * @return the DTO of the driving session
+     */
     public DrivingSessionResponseDTO convertDrivingSessionToDTO(DrivingSession session) {
         return new DrivingSessionResponseDTO(
             session.getId(),
@@ -75,6 +94,11 @@ public class DTOConverterService {
         );
     }
 
+    /**
+     * Converts an event to a DTO
+     * @param event the event to convert
+     * @return the DTO of the event
+     */
     public EventResponseDTO convertEventToDTO(Event event) {
         EventResponseDTO dto = new EventResponseDTO();
         dto.setId(event.getId());
@@ -85,6 +109,11 @@ public class DTOConverterService {
         return dto;
     }
 
+    /**
+     * Converts an event type to a DTO
+     * @param eventType the event type to convert
+     * @return the DTO of the event type
+     */
     public EventTypeResponseDTO convertEventTypeToDTO(EventType eventType) {
         EventTypeResponseDTO dto = new EventTypeResponseDTO();
         dto.setId(eventType.getId());

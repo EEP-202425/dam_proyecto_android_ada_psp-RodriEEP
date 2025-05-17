@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -13,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.volantum.domain.Car;
@@ -61,8 +62,8 @@ class CarServiceTest {
 	@Test
 	void carsByUserIdTest() {
 		carService.addCarToUser(carTest, testUser);
-		List<Car> cars = carService.carsByUserId(testUser.getId());
-		assertEquals(carTest.getPlate(), cars.get(0).getPlate());
+		Page<Car> cars = carService.carsByUserId(testUser.getId(), Pageable.unpaged());
+		assertEquals(carTest.getPlate(), cars.getContent().get(0).getPlate());
 	}
 	
 	@Test
@@ -71,9 +72,9 @@ class CarServiceTest {
 		CarRequestDTO carTest2 = new CarRequestDTO("ORM343", "Toyota", "Corolla", 2020, null, 0.0);
 		carService.addCarToUser(carTest2, testUser);
 		
-		List<Car> cars = carService.carsByUserId(testUser.getId());
+		Page<Car> cars = carService.carsByUserId(testUser.getId(), Pageable.unpaged());
 
-		assertEquals(2, cars.size());
+		assertEquals(2, cars.getContent().size());
 	}
 
 	@Test

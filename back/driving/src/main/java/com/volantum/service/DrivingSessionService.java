@@ -42,6 +42,11 @@ public class DrivingSessionService implements DrivingSessionServiceInterface {
 		this.carRepository = carRepository;
 	}
 
+	/**
+	 * Saves a driving session
+	 * @param dto the driving session to save
+	 * @return the driving session saved
+	 */
 	public DrivingSession save(DrivingSessionRequestDTO dto) {
 		
 		User user = userRepository.findById(dto.getUserId()).orElseThrow();
@@ -60,14 +65,29 @@ public class DrivingSessionService implements DrivingSessionServiceInterface {
 		return drivingSessionRepository.save(session);
 	}
 
+	/**
+	 * Finds a driving session by id
+	 * @param id the id of the driving session to find
+	 * @return the driving session found
+	 */
 	public Optional<DrivingSession> findById(int id) {
 		return drivingSessionRepository.findById(id);
 	}
 
+	/**
+	 * Finds a driving session by user id
+	 * @param userId the id of the user to find the driving sessions of
+	 * @return the driving sessions found
+	 */
 	public List<DrivingSession> findByUserId(int userId) {
 		return drivingSessionRepository.findByUserId(userId);
 	}
 
+	/**
+	 * Finds a driving session by car id
+	 * @param carId the id of the car to find the driving sessions of
+	 * @return the driving sessions found
+	 */
 	public List<DrivingSession> findByCarId(int carId) {
 		return drivingSessionRepository.findByCarId(carId);
 	}
@@ -135,14 +155,28 @@ public class DrivingSessionService implements DrivingSessionServiceInterface {
 		return drivingSessionRepository.save(session);
 	}
 
+	/**
+	 * Deletes all driving sessions
+	 */
 	public void deleteAll() {
 		drivingSessionRepository.deleteAll();
 	}
 
+	/**
+	 * Finds a driving session by user id and car id
+	 * @param userId the id of the user to find the driving sessions of
+	 * @param carId the id of the car to find the driving sessions of
+	 * @return the driving sessions found
+	 */
 	public List<DrivingSession> findByUserIdAndCarId(int userId, int carId) {
 		return drivingSessionRepository.findByUserIdAndCarId(userId, carId);
 	}
 
+	/**
+	 * Converts a driving session to a DTO
+	 * @param session the driving session to convert
+	 * @return the DTO of the driving session
+	 */
 	public DrivingSessionResponseDTO convertToDTO(DrivingSession session) {
 		return dtoConverterService.convertDrivingSessionToDTO(session);
 	}
