@@ -3,6 +3,8 @@ package com.volantum.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,8 +57,8 @@ public class CarService implements CarServiceInterface {
 		return carRepository.findByPlate(plate);
 	}
 	
-	public List<Car> carsByUserId(int userId) {
-		return carRepository.findAllByUserId(userId);
+	public Page<Car> carsByUserId(int userId, Pageable pageable) {
+		return carRepository.findAllByUserId(userId, pageable);
 	}
 
 	public CarResponseDTO convertToDTO(Car car) {

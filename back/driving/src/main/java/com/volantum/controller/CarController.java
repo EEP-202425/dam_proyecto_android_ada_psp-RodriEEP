@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,11 +49,10 @@ public class CarController {
 	}
 
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<List<CarResponseDTO>> carsByUser(@PathVariable int userId) {
-		List<Car> cars = carService.carsByUserId(userId);
-		return ResponseEntity.ok(cars.stream()
-			.map(carService::convertToDTO)
-			.collect(Collectors.toList()));
+	public ResponseEntity<Page<CarResponseDTO>> carsByUser(@PathVariable int userId, @ParameterObject Pageable pageable) {		
+		Page<Car> cars = carService.carsByUserId(userId, pageable);
+		Page<CarResponseDTO> dtoPage = cars.map(carService::convertToDTO);
+		return ResponseEntity.ok(dtoPage);
 	}
 
 	@PostMapping("/user/{userId}")

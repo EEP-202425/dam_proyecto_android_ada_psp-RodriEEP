@@ -1,6 +1,7 @@
 package com.example.volantum.ui.screens.home
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -51,8 +51,9 @@ fun HomeScreen(
             Text(uiState.message ?: "Error al cargar perfil")
         }
         is HomeUiState.Success -> {
-           val user = uiState.user
+            val user = uiState.user
             val lastSession = user.drivingSessions?.firstOrNull()
+            val defaultCar = user.cars?.firstOrNull()
             val sweepAngle = (user.score.toFloat() / 5f) * 360f
             val arcColor = when {
                 user.score >= 4 -> MaterialTheme.colorScheme.secondary
@@ -158,7 +159,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(32.dp))
 
                     Text(
-                        "Tus coches",
+                        "Tu coche preferido",
                         color = MaterialTheme.colorScheme.onBackground,
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -174,17 +175,19 @@ fun HomeScreen(
                         )
                     }
                 } else {
-                    items(user.cars ?: emptyList()) { car ->
-                        CarCard(car = car, navController = navController)
+                    item {
+                        if (defaultCar != null) {
+                            CarCard(car = defaultCar, navController = navController)
+                        }
                         Spacer(modifier = Modifier.height(20.dp))
                     }
                 }
                 item {
-                    Box(
+                    Column (
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp),
-                        contentAlignment = Alignment.Center
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Button(
                             onClick = {
@@ -195,7 +198,18 @@ fun HomeScreen(
                             ),
                             elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
                         ) {
-                            Text("Crear coche")
+                            Text("Agregar coche")
+                        }
+                        Button(
+                            onClick = {
+                                navController.navigate(NavigationRouter.Cars.route)
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.background,
+                                contentColor = MaterialTheme.colorScheme.onSurface,
+                            )
+                        ) {
+                            Text("Ver todos")
                         }
                     }
                 }
